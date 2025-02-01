@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/Provider/query-provider";
+import { Toaster } from "sonner";
 
 const worksans = Work_Sans({
   variable: "--font-worksans",
@@ -57,6 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${worksans.variable} antialiased`}>
+        <Toaster expand visibleToasts={9} richColors position="top-right" />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>

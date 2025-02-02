@@ -19,6 +19,8 @@ export default function Auth() {
   //   setIsLogin(login);
   // }, [searchParams]);
 
+  // some things added
+
   return (
     <section className="h-screen items-center justify-center p-0 md:flex">
       <div className="relative h-screen min-h-[600px] w-full overflow-hidden md:h-[500px] md:w-11/12 md:max-w-4xl md:rounded-3xl md:bg-violet-50">

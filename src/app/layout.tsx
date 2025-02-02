@@ -57,7 +57,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${worksans.variable} antialiased`}>
+      <body
+        className={`${worksans.variable} mx-auto max-w-screen-2xl antialiased`}
+      >
         <Toaster expand visibleToasts={9} richColors position="top-right" />
         <QueryProvider>{children}</QueryProvider>
       </body>

@@ -1,3 +1,11 @@
+// import WelcomePopUp from "@/components/popups/welcome-pop";
+import Landing from "@/components/home/landing";
+
 export default function Home() {
-  return <div>welcome</div>;
+  return (
+    <main className="bg-slate-50">
+      {/* <WelcomePopUp /> */}
+      <Landing />
+    </main>
+  );
 }

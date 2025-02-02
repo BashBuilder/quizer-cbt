@@ -9,6 +9,11 @@ const Footer = () => {
           <Logo />
         </div>
       </div>
+      <div className="flex items-center justify-center py-6">
+        <p className="text-sm text-zinc-500">
+          &copy; {new Date().getFullYear()} Quizer. All rights reserved.
+        </p>
+      </div>
     </footer>
   );
 };

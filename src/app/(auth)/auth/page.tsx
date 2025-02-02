@@ -8,12 +8,13 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 
 export default function Auth() {
-  const login = Boolean(useSearchParams().get("login"));
-  const [isLogin, setIsLogin] = useState(login);
+  const [isLogin, setIsLogin] = useState(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
+    const login = Boolean(searchParams.get("login"));
     setIsLogin(login);
-  }, [login]);
+  }, [searchParams]);
 
   return (
     <section className="h-screen items-center justify-center p-0 md:flex">

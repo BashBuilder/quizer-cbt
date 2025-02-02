@@ -1,20 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  // useEffect,
+  useState,
+} from "react";
 import LoginUser from "./login";
 import SignupUser from "./signup";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(false);
-  const searchParams = useSearchParams();
+  const [isLogin, setIsLogin] = useState(true);
+  // const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const login = Boolean(searchParams.get("login"));
-    setIsLogin(login);
-  }, [searchParams]);
+  // useEffect(() => {
+  //   const login = Boolean(searchParams.get("login"));
+  //   setIsLogin(login);
+  // }, [searchParams]);
 
   return (
     <section className="h-screen items-center justify-center p-0 md:flex">

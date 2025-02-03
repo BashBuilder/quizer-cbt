@@ -12,6 +12,7 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "Courses", href: "/courses" },
   { label: "About", href: "/about" },
+  { label: "Practice", href: "/quiz" },
 ];
 
 const Header = () => {
@@ -33,7 +34,7 @@ const Header = () => {
                 key={index}
                 href={link.href}
                 className={cn(
-                  "rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-300 hover:bg-primary/10",
+                  "rounded-md px-3 py-1.5 text-sm font-medium text-zinc-600 transition-colors duration-300 hover:bg-primary/10",
                   {
                     "bg-primary/20 text-primary": pathname === link.href,
                     "": pathname !== link.href,

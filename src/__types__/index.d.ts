@@ -19,3 +19,9 @@ export interface QuestionType {
   hasPassage: number;
   category: string;
 }
+
+interface QuestionApiResponseType {
+  subject: string;
+  status: number;
+  data: QuestionType[];
+}

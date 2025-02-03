@@ -12,11 +12,13 @@ const Exam = () => {
   const [currentQuestion, setCurrentQurestion] = useState(0);
 
   const questions: QuestionApiResponseType | undefined = useMemo(() => {
-    const storedQuestion = localStorage.getItem("quizer-test");
-    if (!storedQuestion) return;
+    if (typeof window !== "undefined") {
+      const storedQuestion = localStorage.getItem("quizer-test");
+      if (!storedQuestion) return;
 
-    setLoading(false);
-    return JSON.parse(storedQuestion);
+      setLoading(false);
+      return JSON.parse(storedQuestion);
+    }
   }, []);
 
   const handleNextQuestion = (num: number) =>

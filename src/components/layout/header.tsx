@@ -6,14 +6,8 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { AlignRight } from "lucide-react";
-
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Courses", href: "/courses" },
-  { label: "About", href: "/about" },
-  { label: "Practice", href: "/quiz" },
-];
+import { Sidebar } from "./sidebar";
+import { navLinks } from "@/data/links";
 
 const Header = () => {
   const pathname = usePathname();
@@ -57,9 +51,9 @@ const Header = () => {
           </Link>
         </div>
 
-        <button className="md:hidden">
-          <AlignRight />
-        </button>
+        <div className="md:hidden">
+          <Sidebar />
+        </div>
       </nav>
     </header>
   );

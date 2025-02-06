@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import ExamModal from "./exam-modal";
 import { getItem } from "@/lib/auth";
 import { localstore } from "@/data/constants";
-import { toast } from "sonner";
 
 const Exam = () => {
   const [loading, setLoading] = useState(true);
@@ -20,43 +19,6 @@ const Exam = () => {
     if (!storedQuestion) return;
     setQuestions(storedQuestion);
     setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      toast.warning(
-        "Are you sure you want to leave? Your progress may be lost.",
-      );
-      event.returnValue =
-        "Are you sure you want to leave? Your progress may be lost.";
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
-  //  const [warningCount, setWarningCount] = useState(0);
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        //  setWarningCount((prev) => prev + 1);
-        //  alert("Warning: Do not switch tabs! Your exam may be invalidated.");
-        toast.error(
-          "Warning: Do not switch tabs! Your exam may be invalidated.",
-        );
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
   }, []);
 
   if (loading) {

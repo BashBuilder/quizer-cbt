@@ -1,14 +1,12 @@
-"use client";
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Cookies } from "react-cookie";
+// import { Cookies } from "react-cookie";
 // import { decrypt, encrypt } from "./encryption";
 // import jwt from "jsonwebtoken";
 // import { toast } from "sonner";
 
 import { localstore } from "@/data/constants";
 
-const cookie = new Cookies();
+// const cookie = new Cookies();
 
 // export const setToken = (key: string, token: string) => {
 //   const currentDate = new Date();
@@ -93,26 +91,27 @@ const cookie = new Cookies();
 // };
 
 export const saveItem = (key: string, value: any) => {
-  // localStorage.setItem(key, JSON.stringify(item));
-  cookie.set(key, value, {
-    httpOnly: false,
-    secure: true,
-    sameSite: "lax",
-    path: "/",
-  });
+  if (typeof window !== "undefined") {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
 };
 
 export const getItem = (key: string) => {
-  return cookie.get(key);
-  // const item = localStorage.getItem(key);
-  // return item ? JSON.parse(item) : null;
+  if (typeof window !== "undefined") {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  }
+  return null; // Return null if running on the server
 };
+
 export const removeItem = (key: string) => {
-  // localStorage.removeItem(key);
-  cookie.remove(key);
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(key);
+  }
 };
 
 export const removeItems = () => {
-  // Object.values(localstore).forEach((item) => removeItem(item));
-  Object.values(localstore).forEach((key) => removeItem(key));
+  if (typeof window !== "undefined") {
+    Object.values(localstore).forEach((item) => removeItem(item));
+  }
 };

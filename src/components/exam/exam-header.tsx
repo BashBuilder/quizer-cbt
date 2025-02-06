@@ -12,51 +12,53 @@ const ExamHeader = () => {
   const [warningCount, setWarningCount] = useState(0);
   const router = useRouter();
 
-  const isExamStarted = useMemo(() => {
-    return getItem(localstore.examStarted);
-  }, []);
+  const isExamStarted = useMemo(() => getItem(localstore.examStarted), []);
+  const time = useMemo(() => getItem(localstore.time) || 0, []);
 
-  const time = useMemo(() => {
-    const examDuration = getItem(localstore.time);
-    if (examDuration) {
-      return examDuration;
-    }
-  }, []);
-
-  const handleWarnings = () => {
-    setWarningCount((prev) => prev + 1);
+  /** Handle warning messages in sequence */
+  useEffect(() => {
     if (warningCount === 1) {
       toast.error(
         "Warning: Do not minimize your browser! Your exam may be invalidated.",
       );
     } else if (warningCount === 2) {
       toast.error(
-        "Warning: This is the last warning. Your exam will be invalidated",
+        "Warning: This is the last warning. Your exam will be invalidated.",
       );
-    } else if (warningCount > 2) {
+    } else if (warningCount === 3) {
       toast.error("Your exam will be invalidated.");
-      onExamFinish();
+      handleExamFinish();
     }
+  }, [warningCount]);
+
+  /** Function to trigger warnings safely */
+  const handleWarnings = () => {
+    setWarningCount((prev) => Math.min(prev + 1, 3)); // Prevents going above 3
   };
 
-  const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-    event.preventDefault();
-    event.returnValue = "";
-    handleWarnings();
+  /** Ensures exam submission happens only once */
+  const handleExamFinish = () => {
+    removeItem(localstore.time);
+    removeItem(localstore.examStarted);
+    toast.warning("Submitting...");
+
+    setTimeout(() => {
+      window.location.href = "/quiz/result"; // Ensure redirect happens only once
+    }, 1000);
   };
 
-  const handleBlur = () => {
-    toast.error(
-      "Warning: You minimized the window! This may lead to exam disqualification.",
-    );
-  };
-
+  /** Prevents multiple warnings firing too fast */
+  let warningTimeout: NodeJS.Timeout;
   const handleVisibilityChange = () => {
     if (document.hidden) {
-      handleWarnings();
+      clearTimeout(warningTimeout);
+      warningTimeout = setTimeout(() => {
+        handleWarnings();
+      }, 500);
     }
   };
 
+  /** Prevents refresh & developer tools */
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "F5" || (event.ctrlKey && event.key === "r")) {
       event.preventDefault();
@@ -74,24 +76,25 @@ const ExamHeader = () => {
     }
   };
 
-  const handleContextMenu = (event: MouseEvent) => {
-    event.preventDefault();
-  };
+  /** Disable right-click */
+  const handleContextMenu = (event: MouseEvent) => event.preventDefault();
 
+  /** Prevent back navigation */
   const handleBackButton = () => {
     toast.error("You cannot go back during the exam!");
     router.push("/exam");
   };
 
+  /** Enable full-screen mode */
   const enableFullScreen = () => {
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen();
     }
   };
 
+  /** Attach event listeners */
   useEffect(() => {
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("blur", handleBlur);
+    window.addEventListener("beforeunload", handleWarnings);
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("contextmenu", handleContextMenu);
@@ -101,22 +104,13 @@ const ExamHeader = () => {
     enableFullScreen();
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("beforeunload", handleWarnings);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("contextmenu", handleContextMenu);
       window.removeEventListener("popstate", handleBackButton);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [warningCount]);
-
-  const onExamFinish = () => {
-    removeItem(localstore.time);
-    removeItem(localstore.examStarted);
-    toast.warning("Submitting...");
-    window.location.href = "/quiz/result";
-  };
+  }, []);
 
   if (!isExamStarted) {
     return (
@@ -134,7 +128,7 @@ const ExamHeader = () => {
         <Logo />
       </div>
       <CounterDownTimer
-        onFinish={onExamFinish}
+        onFinish={handleExamFinish}
         duration={time}
         startCountdown={true}
       />

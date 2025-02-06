@@ -3,8 +3,8 @@ import { CheckSquare2Icon } from "lucide-react";
 
 export default function HowItWorks() {
   return (
-    <section className="grid grid-cols-5 gap-6 py-5">
-      <div className="col-span-3 flex flex-col gap-6">
+    <section className="grid gap-6 py-5 md:grid-cols-5">
+      <div className="flex flex-col gap-6 md:col-span-3">
         <h4 className="text-primary">HOW</h4>
         <h2 className="text-slate-800">How It Works</h2>
         <ul>
@@ -37,11 +37,11 @@ export default function HowItWorks() {
           </li>
         </ul>
       </div>
-      <div className="col-span-2" data-aos="fade-up-left">
+      <div className="md:col-span-2">
         <img
           src="assets/svg/slider-5.svg"
           alt="how"
-          className="max-h-96 w-full"
+          className="w-full md:max-h-96"
         />
       </div>
     </section>

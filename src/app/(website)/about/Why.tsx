@@ -4,18 +4,15 @@ import { CheckCheckIcon } from "lucide-react";
 export default function Why() {
   return (
     <section className="grid gap-6 md:grid-cols-5">
-      <div
-        className="order-2 col-span-2 w-auto md:order-1"
-        data-aos="fade-right"
-      >
+      <div className="order-2 md:order-1 md:col-span-2">
         <img
           src="assets/svg/slider-1.svg"
           alt="slider-1"
-          className="max-h-96 w-full object-contain"
+          className="w-full object-contain md:max-h-96"
         />
       </div>
 
-      <div className="order-1 col-span-3 flex flex-col gap-6 md:order-2">
+      <div className="order-1 flex flex-col gap-6 md:order-2 md:col-span-3">
         <h4 className="font-semibold text-primary"> WHY </h4>
         <h2>Quizer: Quizzing Beyond Boundaries</h2>
         <p>

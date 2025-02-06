@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { subjects } from "@/data/data";
 import { useGetRandomQuestions } from "@/services/questions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -82,7 +83,7 @@ export function SingleSubjectModal() {
           <div className="grid grid-cols-4 items-center gap-4">
             <label className="text-right">Subject</label>
             <div className="col-span-3">
-              <SelectSearch setOption={setOption} />
+              <SelectSearch setOption={setOption} data={subjects} />
               {errors.subject && (
                 <p className="text-sm text-red-500">{errors.subject.message}</p>
               )}

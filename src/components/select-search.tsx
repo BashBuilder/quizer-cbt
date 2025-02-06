@@ -18,22 +18,12 @@ import {
 import { Check, ChevronDown } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 
-const frameworks = [
-  {
-    value: "english",
-    label: "English Language",
-  },
-  {
-    value: "chemistry",
-    label: "Chemistry",
-  },
-];
-
 interface SelectPropsType {
   setOption: (data: string) => void;
+  data: { value: string; label: string }[];
 }
 
-export default function SelectSearch({ setOption }: SelectPropsType) {
+export default function SelectSearch({ setOption, data }: SelectPropsType) {
   const id = useId();
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
@@ -55,9 +45,8 @@ export default function SelectSearch({ setOption }: SelectPropsType) {
           >
             <span className={cn("truncate", !value && "text-muted-foreground")}>
               {value
-                ? frameworks.find((framework) => framework.value === value)
-                    ?.label
-                : "Select framework"}
+                ? data.find((framework) => framework.value === value)?.label
+                : ""}
             </span>
             <ChevronDown
               size={16}
@@ -76,7 +65,7 @@ export default function SelectSearch({ setOption }: SelectPropsType) {
             <CommandList>
               <CommandEmpty>No framework found.</CommandEmpty>
               <CommandGroup>
-                {frameworks.map((framework) => (
+                {data.map((framework) => (
                   <CommandItem
                     key={framework.value}
                     value={framework.value}

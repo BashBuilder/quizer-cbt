@@ -1,7 +1,7 @@
 "use client";
 import { Calculator } from "lucide-react";
 import ExamCalculator from "./ExamCalculator";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface CountDownProps {
   onFinish: () => void;
@@ -37,8 +37,16 @@ export default function CountDownTimer({
         const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
         const seconds = Math.floor((timeRemaining / 1000) % 60);
-        setExamTime({ minutes, seconds, hours });
-        setExamTime((prevTime) => ({ ...prevTime, minutes, seconds, hours }));
+        setExamTime((prevTime) => {
+          if (
+            prevTime.hours !== hours ||
+            prevTime.minutes !== minutes ||
+            prevTime.seconds !== seconds
+          ) {
+            return { hours, minutes, seconds };
+          }
+          return prevTime;
+        });
       }
     };
 
@@ -57,6 +65,22 @@ export default function CountDownTimer({
     }
   }, [startCountdown, startTimer]);
 
+  const examTimeDisplay = useMemo(() => {
+    return (
+      <>
+        <div className="flex size-8 items-center justify-center rounded-md bg-violet-50 font-medium text-primary">
+          <h6>{examTime.hours}</h6>
+        </div>
+        <div className="flex size-8 items-center justify-center rounded-md bg-violet-50 font-medium text-primary">
+          <h6>{examTime.minutes}</h6>
+        </div>
+        <div className="flex size-8 items-center justify-center rounded-md bg-violet-50 font-medium text-primary">
+          <h6>{examTime.seconds}</h6>
+        </div>
+      </>
+    );
+  }, [examTime]);
+
   return (
     <article className="flex items-center justify-end gap-1 md:right-[12%]">
       <ExamCalculator isCalculatorShown={isCalculatorShown} />
@@ -67,15 +91,7 @@ export default function CountDownTimer({
       >
         <Calculator />
       </button>
-      <div className="flex size-8 items-center justify-center rounded-md bg-violet-50 font-medium text-primary">
-        <h6>{examTime.hours}</h6>
-      </div>
-      <div className="flex size-8 items-center justify-center rounded-md bg-violet-50 font-medium text-primary">
-        <h6>{examTime.minutes}</h6>
-      </div>
-      <div className="flex size-8 items-center justify-center rounded-md bg-violet-50 font-medium text-primary">
-        <h6>{examTime.seconds}</h6>
-      </div>
+      {examTimeDisplay}
     </article>
   );
 }

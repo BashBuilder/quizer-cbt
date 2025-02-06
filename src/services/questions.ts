@@ -13,7 +13,7 @@ export const useGetRandomQuestions = () => {
         }>("/question/random", data);
         return response.data;
       } catch (error) {
-        return error;
+        throw error;
       }
     },
   });

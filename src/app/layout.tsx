@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Work_Sans } from "next/font/google";
+import { Mona_Sans } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/Provider/query-provider";
 import { Toaster } from "sonner";
 
-const worksans = Work_Sans({
+const monasans = Mona_Sans({
   variable: "--font-worksans",
   subsets: ["latin"],
 });
@@ -58,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${worksans.variable} mx-auto max-w-screen-2xl antialiased`}
+        className={`${monasans.variable} mx-auto max-w-screen-2xl antialiased`}
       >
         <Toaster visibleToasts={9} richColors position="top-right" />
         <QueryProvider>{children}</QueryProvider>

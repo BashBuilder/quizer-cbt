@@ -1,4 +1,5 @@
-"ise client";
+"use client";
+
 import Logo from "@/components/global/logo";
 import SelectSearch from "@/components/select-search";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { localstore } from "@/data/constants";
 import { subjects } from "@/data/data";
+import { saveItem } from "@/lib/auth";
 import { useGetRandomQuestions } from "@/services/questions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -45,8 +48,8 @@ export function SingleSubjectModal() {
       const loading = toast.loading("loading...");
       fetchRandomQuestion(data, {
         onSuccess(data) {
+          saveItem(localstore.questions, data);
           toast.success("Starting...");
-          localStorage.setItem("quizer-test", JSON.stringify(data));
           window.location.href = "/exam";
         },
         onError(error) {

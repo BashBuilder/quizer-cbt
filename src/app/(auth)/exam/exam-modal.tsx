@@ -2,8 +2,10 @@
 
 import { QuestionType } from "@/__types__";
 import { Button } from "@/components/ui/button";
+import { localstore } from "@/data/constants";
+import { getItem, saveItem } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface SelectedOptionType {
   num: number;
@@ -28,10 +30,21 @@ const ExamModal = ({ questions }: { questions: QuestionType[] }) => {
     });
   };
 
-  console.log(selectedOption);
+  useEffect(() => {
+    const options = getItem(localstore.testOptions);
+    if (options && options.length) {
+      setSelectedOption(options);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedOption.length) {
+      saveItem(localstore.testOptions, selectedOption);
+    }
+  }, [selectedOption]);
 
   return (
-    <section className="mx-auto flex max-w-screen-lg flex-col gap-4">
+    <section className="mx-auto flex w-11/12 max-w-screen-lg flex-col gap-4">
       <div className="mb-4 flex flex-col gap-4 rounded-xl bg-background p-4 shadow-xl md:mb-10 md:px-20 md:py-10">
         {questions.map((question, qIndex) => {
           return (
@@ -83,11 +96,12 @@ const ExamModal = ({ questions }: { questions: QuestionType[] }) => {
                         className={cn(
                           "rounded-md bg-primary/5 px-4 py-2 text-left transition-colors duration-300 hover:bg-primary/10",
                           {
-                            "bg-primary text-white": selectedOption.some(
-                              (option) =>
-                                option.num === qIndex + 1 &&
-                                option.option === opt,
-                            ),
+                            "bg-primary text-white hover:bg-primary/90":
+                              selectedOption.some(
+                                (option) =>
+                                  option.num === qIndex + 1 &&
+                                  option.option === opt,
+                              ),
                           },
                         )}
                         onClick={() => updateAnswers(qIndex + 1, opt)}
@@ -135,7 +149,7 @@ const ExamModal = ({ questions }: { questions: QuestionType[] }) => {
               className={cn("bg-primary/10 text-primary hover:bg-primary/20", {
                 "bg-primary text-white hover:bg-primary/90":
                   index === currentQuestion ||
-                  !!selectedOption[index + 1].option,
+                  !!selectedOption?.find((option) => option.num === index + 1),
               })}
               size="icon"
               onClick={() => handleRandomQuestion(index)}

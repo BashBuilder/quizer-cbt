@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { Cookies } from "react-cookie";
 // import { decrypt, encrypt } from "./encryption";

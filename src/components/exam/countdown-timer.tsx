@@ -2,6 +2,8 @@
 import { Calculator } from "lucide-react";
 import ExamCalculator from "./ExamCalculator";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { saveItem } from "@/lib/auth";
+import { localstore } from "@/data/constants";
 
 interface CountDownProps {
   onFinish: () => void;
@@ -37,6 +39,9 @@ export default function CountDownTimer({
         const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
         const seconds = Math.floor((timeRemaining / 1000) % 60);
+
+        saveItem(localstore.time, timeRemaining / 1000);
+
         setExamTime((prevTime) => {
           if (
             prevTime.hours !== hours ||

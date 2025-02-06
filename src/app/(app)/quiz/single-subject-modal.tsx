@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { localstore } from "@/data/constants";
 import { subjects } from "@/data/data";
-import { saveItem } from "@/lib/auth";
+import { removeItems, saveItem } from "@/lib/auth";
 import { useGetRandomQuestions } from "@/services/questions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -25,6 +25,7 @@ const SubjectSchema = z.object({
   subject: z.string().min(1, "Subject is Required"),
   number: z.number().min(1, "Number is Required"),
   year: z.number().optional(),
+  time: z.number(),
 });
 
 export type QuizType = z.infer<typeof SubjectSchema>;
@@ -45,10 +46,18 @@ export function SingleSubjectModal() {
 
   const onSubmit: SubmitHandler<QuizType> = async (data) => {
     try {
+      removeItems();
+      const payload = {
+        subject: data.subject,
+        number: data.number,
+      };
       const loading = toast.loading("loading...");
-      fetchRandomQuestion(data, {
-        onSuccess(data) {
-          saveItem(localstore.questions, data);
+      const timeInSeconds = data.time * 60;
+      fetchRandomQuestion(payload, {
+        onSuccess(response) {
+          saveItem(localstore.questions, response);
+          saveItem(localstore.time, timeInSeconds);
+          saveItem(localstore.examStarted, true);
           toast.success("Starting...");
           window.location.href = "/exam";
         },
@@ -71,7 +80,7 @@ export function SingleSubjectModal() {
           Single
         </button>
       </DialogTrigger>
-      <DialogContent className="">
+      <DialogContent className="w-11/12 max-sm:rounded-md">
         <DialogHeader className="flex flex-col items-center justify-center gap-2">
           <Logo />
           <DialogTitle className="text-center">
@@ -108,6 +117,24 @@ export function SingleSubjectModal() {
               />
               {errors.number && (
                 <p className="text-sm text-red-500">{errors.number.message}</p>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <label htmlFor="time" className="text-right">
+              Time (in minutes)
+            </label>
+            <div className="col-span-3">
+              <Input
+                id="time"
+                type="number"
+                defaultValue="20"
+                min={1}
+                max={60}
+                {...register("time", { valueAsNumber: true })}
+              />
+              {errors.time && (
+                <p className="text-sm text-red-500">{errors.time.message}</p>
               )}
             </div>
           </div>

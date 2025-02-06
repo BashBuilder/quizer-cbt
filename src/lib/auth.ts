@@ -4,6 +4,8 @@
 // import jwt from "jsonwebtoken";
 // import { toast } from "sonner";
 
+import { localstore } from "@/data/constants";
+
 // const cookie = new Cookies();
 
 // export const setToken = (key: string, token: string) => {
@@ -95,4 +97,11 @@ export const saveItem = (key: string, item: any) => {
 export const getItem = (key: string) => {
   const item = localStorage.getItem(key);
   return item ? JSON.parse(item) : null;
+};
+export const removeItem = (key: string) => {
+  localStorage.removeItem(key);
+};
+
+export const removeItems = () => {
+  Object.values(localstore).forEach((item) => removeItem(item));
 };

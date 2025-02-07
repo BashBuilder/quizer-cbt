@@ -7,17 +7,21 @@ import React, { useEffect, useState } from "react";
 import ExamModal from "./exam-modal";
 import { getItem } from "@/lib/auth";
 import { localstore } from "@/data/constants";
+import { cn } from "@/lib/utils";
 
 const Exam = () => {
   const [loading, setLoading] = useState(true);
+  const [currentSubject, setCurrentSubject] = useState("");
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [questions, setQuestions] = useState<
-    QuestionApiResponseType | undefined
+    undefined | QuestionApiResponseType[]
   >();
 
   useEffect(() => {
     const storedQuestion = getItem(localstore.questions);
     if (!storedQuestion) return;
-    setQuestions(storedQuestion);
+    setQuestions([...storedQuestion]);
+    setCurrentSubject(storedQuestion[0].subject);
     setLoading(false);
   }, []);
 
@@ -27,26 +31,56 @@ const Exam = () => {
     </div>;
   }
 
+  if (!questions) {
+    return (
+      <div>
+        <div className="flex h-[60vh] items-center justify-center">
+          <Loading />
+        </div>
+        ; no Questions
+      </div>
+    );
+  }
+
+  const handleSelectSubject = (subject: string) => {
+    setCurrentSubject(subject);
+
+    const index = questions.findIndex(
+      (question) => question.subject === subject,
+    );
+
+    if (index !== -1) {
+      setCurrentQuestion(index);
+    }
+  };
+
   return (
     <main className="container mx-auto">
       <ExamHeader />
 
-      <div className="px-4 md:px-8">
-        {!!questions && (
-          <section className="mx-auto flex max-w-screen-lg flex-col gap-4 pt-12">
-            {/* buutons */}
-            <div>
+      <div className="px-4 pt-10 md:px-8">
+        <section className="mx-auto flex max-w-screen-lg flex-col gap-4 pt-12">
+          {/* buutons */}
+          <div>
+            {questions.map((question) => (
               <Button
-                className={`w-fit rounded-md font-semibold capitalize hover:bg-primary/90 hover:shadow`}
+                key={question.subject}
+                variant={
+                  currentSubject === question.subject ? "default" : "outline"
+                }
+                className={cn(
+                  `w-fit rounded-md font-semibold capitalize hover:bg-primary/90 hover:shadow`,
+                )}
+                onClick={() => handleSelectSubject(question.subject)}
               >
-                {questions.subject}
+                {question.subject}
               </Button>
-            </div>
+            ))}
+          </div>
 
-            {/* Question */}
-            <ExamModal questions={questions.data} />
-          </section>
-        )}
+          {/* Question */}
+          <ExamModal data={questions[currentQuestion]} />
+        </section>
       </div>
     </main>
   );

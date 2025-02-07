@@ -7,9 +7,13 @@ import { getItem, removeItem } from "@/lib/auth";
 import { localstore } from "@/data/constants";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import ExamCalculator from "./ExamCalculator";
+import { Calculator } from "lucide-react";
 
 const ExamHeader = () => {
   const [warningCount, setWarningCount] = useState(0);
+  const [isCalculatorShown, setIsCalculatorShown] = useState(false);
+
   const router = useRouter();
 
   const isExamStarted = useMemo(() => getItem(localstore.examStarted), []);
@@ -110,11 +114,12 @@ const ExamHeader = () => {
       window.removeEventListener("contextmenu", handleContextMenu);
       window.removeEventListener("popstate", handleBackButton);
     };
+    // eslint-disable-next-line
   }, []);
 
   if (!isExamStarted) {
     return (
-      <header className="container bg-primary px-8 py-4">
+      <header className="container fixed left-0 top-0 bg-primary px-8 py-4">
         <div className="pointer-events-none text-white">
           <Logo />
         </div>
@@ -123,15 +128,24 @@ const ExamHeader = () => {
   }
 
   return (
-    <header className="container relative flex items-center justify-between gap-8 bg-primary px-8 py-4">
+    <header className="container fixed left-0 top-0 flex items-center justify-between gap-3 bg-primary px-4 py-4 md:gap-8 md:px-8">
       <div className="pointer-events-none text-white">
         <Logo />
       </div>
-      <CounterDownTimer
-        onFinish={handleExamFinish}
-        duration={time}
-        startCountdown={true}
-      />
+      <ExamCalculator isCalculatorShown={isCalculatorShown} />
+      <div className="flex items-center gap-2">
+        <button
+          className="mr-5 rounded-md bg-white p-1.5 shadow"
+          onClick={() => setIsCalculatorShown((shownState) => !shownState)}
+        >
+          <Calculator />
+        </button>
+        <CounterDownTimer
+          onFinish={handleExamFinish}
+          duration={time}
+          startCountdown={true}
+        />
+      </div>
       <Button variant="outline" size="sm">
         Submit
       </Button>

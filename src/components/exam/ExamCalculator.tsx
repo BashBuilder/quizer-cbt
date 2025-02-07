@@ -58,7 +58,7 @@ export default function ExamCalculator({
 
   return (
     <div
-      className={` ${isCalculatorShown ? "absolute" : "hidden"} top-16 z-40 m-2 flex w-60 flex-col gap-2 overflow-hidden rounded-xl bg-slate-700 p-2`}
+      className={` ${isCalculatorShown ? "absolute" : "hidden"} right-0 top-16 z-40 m-2 flex w-60 flex-col gap-2 overflow-hidden rounded-xl bg-slate-700 p-2`}
     >
       <input
         type="text"

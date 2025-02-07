@@ -76,7 +76,7 @@ export function SingleSubjectModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="min-size-36 flex items-center justify-center rounded-lg bg-primary/20 p-20 text-xl text-zinc-500 shadow hover:shadow-lg">
+        <button className="min-size-36 flex items-center justify-center rounded-lg bg-secondary p-20 text-xl font-medium text-primary shadow transition-all duration-300 hover:shadow-lg">
           Single
         </button>
       </DialogTrigger>

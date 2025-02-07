@@ -25,3 +25,11 @@ interface QuestionApiResponseType {
   status: number;
   data: QuestionType[];
 }
+
+interface SelectedOptionType {
+  subject: string;
+  option: {
+    num: number;
+    option: string;
+  }[];
+}

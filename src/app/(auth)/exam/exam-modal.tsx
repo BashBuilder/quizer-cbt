@@ -1,32 +1,51 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { QuestionType } from "@/__types__";
+import {
+  QuestionApiResponseType,
+  QuestionType,
+  SelectedOptionType,
+} from "@/__types__";
 import { Button } from "@/components/ui/button";
 import { localstore } from "@/data/constants";
 import { getItem, saveItem } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-interface SelectedOptionType {
-  num: number;
-  option: string;
-}
-
-const ExamModal = ({ questions }: { questions: QuestionType[] }) => {
-  const [currentQuestion, setCurrentQurestion] = useState(0);
+const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<SelectedOptionType[]>(
     [],
   );
 
-  const handleNextQuestion = (num: number) =>
-    setCurrentQurestion((prev) => prev + num);
+  const questions: QuestionType[] = useMemo(() => data.data, [data]);
 
-  const handleRandomQuestion = (num: number) => setCurrentQurestion(num);
+  const handleNextQuestion = (num: number) =>
+    setCurrentQuestionIndex((prev) => prev + num);
+
+  const handleRandomQuestion = (num: number) => setCurrentQuestionIndex(num);
 
   const updateAnswers = (num: number, option: string) => {
+    const subject = data.subject;
     setSelectedOption((prev) => {
-      const updatedOptions = prev.filter((opt) => opt.num !== num);
-      return [...updatedOptions, { num, option }];
+      const options: SelectedOptionType[] = [];
+      let found = false;
+
+      prev.forEach((subj) => {
+        if (subj.subject === subject) {
+          found = true;
+          const updatedOptions = subj.option.filter((opt) => opt.num !== num);
+          options.push({
+            ...subj,
+            option: [...updatedOptions, { num, option }],
+          });
+        } else {
+          options.push(subj);
+        }
+      });
+      if (!found) {
+        options.push({ subject, option: [{ num, option }] });
+      }
+      return options;
     });
   };
 
@@ -50,10 +69,10 @@ const ExamModal = ({ questions }: { questions: QuestionType[] }) => {
           return (
             <article
               key={qIndex}
-              className={` ${qIndex === currentQuestion ? "flex flex-col gap-4" : "hidden"} `}
+              className={` ${qIndex === currentQuestionIndex ? "flex flex-col gap-4" : "hidden"} `}
             >
               {question.section &&
-                !questions[currentQuestion].section
+                !questions[currentQuestionIndex].section
                   .toLowerCase()
                   .includes("solution") && (
                   <p
@@ -66,7 +85,7 @@ const ExamModal = ({ questions }: { questions: QuestionType[] }) => {
 
               <div className="flex flex-col gap-4">
                 <div className="flex gap-1">
-                  <p className="text-xl">{currentQuestion + 1}.</p>
+                  <p className="text-xl">{currentQuestionIndex + 1}.</p>
                   {question.question && (
                     <p
                       className="text-xl"
@@ -97,11 +116,15 @@ const ExamModal = ({ questions }: { questions: QuestionType[] }) => {
                           "rounded-md bg-primary/5 px-4 py-2 text-left transition-colors duration-300 hover:bg-primary/10",
                           {
                             "bg-primary text-white hover:bg-primary/90":
-                              selectedOption.some(
-                                (option) =>
-                                  option.num === qIndex + 1 &&
-                                  option.option === opt,
-                              ),
+                              selectedOption
+                                .find(
+                                  (option) => option.subject === data.subject,
+                                )
+                                ?.option.some(
+                                  (item) =>
+                                    item.num === qIndex + 1 &&
+                                    item.option === opt,
+                                ),
                           },
                         )}
                         onClick={() => updateAnswers(qIndex + 1, opt)}
@@ -126,14 +149,14 @@ const ExamModal = ({ questions }: { questions: QuestionType[] }) => {
         <div className="my-6 flex justify-between">
           <Button
             onClick={() => handleNextQuestion(-1)}
-            disabled={currentQuestion === 0}
+            disabled={currentQuestionIndex === 0}
             variant="secondary"
           >
             Previous
           </Button>
           <Button
             onClick={() => handleNextQuestion(1)}
-            disabled={currentQuestion + 1 === questions.length}
+            disabled={currentQuestionIndex + 1 === questions.length}
             variant="secondary"
           >
             Next
@@ -148,8 +171,10 @@ const ExamModal = ({ questions }: { questions: QuestionType[] }) => {
               key={index}
               className={cn("bg-primary/10 text-primary hover:bg-primary/20", {
                 "bg-primary text-white hover:bg-primary/90":
-                  index === currentQuestion ||
-                  !!selectedOption?.find((option) => option.num === index + 1),
+                  index === currentQuestionIndex ||
+                  !!selectedOption
+                    ?.find((item) => item.subject === data.subject)
+                    ?.option.find((option) => option.num === index + 1),
               })}
               size="icon"
               onClick={() => handleRandomQuestion(index)}

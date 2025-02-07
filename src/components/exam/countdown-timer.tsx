@@ -1,6 +1,4 @@
 "use client";
-import { Calculator } from "lucide-react";
-import ExamCalculator from "./ExamCalculator";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { saveItem } from "@/lib/auth";
 import { localstore } from "@/data/constants";
@@ -21,7 +19,6 @@ export default function CountDownTimer({
     minutes: 0,
     hours: 0,
   });
-  const [isCalculatorShown, setIsCalculatorShown] = useState(false);
 
   const startTimer = useCallback(() => {
     // eslint-disable-next-line
@@ -87,15 +84,7 @@ export default function CountDownTimer({
   }, [examTime]);
 
   return (
-    <article className="flex items-center justify-end gap-1 md:right-[12%]">
-      <ExamCalculator isCalculatorShown={isCalculatorShown} />
-
-      <button
-        className="mr-5 rounded-md bg-white p-1.5 shadow"
-        onClick={() => setIsCalculatorShown((shownState) => !shownState)}
-      >
-        <Calculator />
-      </button>
+    <article className="flex items-center justify-end gap-1">
       {examTimeDisplay}
     </article>
   );

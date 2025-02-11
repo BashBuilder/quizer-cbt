@@ -3,6 +3,7 @@ import { Mona_Sans } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/Provider/query-provider";
 import { Toaster } from "sonner";
+import AuthProvider from "@/Provider/auth-provider";
 
 const monasans = Mona_Sans({
   variable: "--font-worksans",
@@ -60,8 +61,10 @@ export default function RootLayout({
       <body
         className={`${monasans.variable} mx-auto max-w-screen-2xl antialiased`}
       >
-        <Toaster visibleToasts={9} richColors position="top-right" />
-        <QueryProvider>{children}</QueryProvider>
+        <AuthProvider>
+          <Toaster visibleToasts={9} richColors position="top-right" />
+          <QueryProvider>{children}</QueryProvider>
+        </AuthProvider>
       </body>
     </html>
   );

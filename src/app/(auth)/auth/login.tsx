@@ -6,6 +6,7 @@ import { z } from "zod";
 import { Loader2, Lock, Mail, Unlock } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import InputLabel from "./input-label";
 // import { toast } from "sonner";
 
 interface LoginProps {
@@ -13,16 +14,12 @@ interface LoginProps {
 }
 
 export default function LoginUser({ isLogin }: LoginProps) {
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isPasswordForgotten, setIsPasswordForgotten] = useState(false);
   const [forgottenEmail, setForgottenEmail] = useState({
     loading: false,
     error: "",
     email: "",
   });
-  // const { login, loginState } = useAuthContext();
-  // const { loading, error } = loginState;
-  // zod schema for form
   const loginSchema = z.object({
     email: z
       .string()
@@ -87,73 +84,23 @@ export default function LoginUser({ isLogin }: LoginProps) {
       {!isPasswordForgotten ? (
         <form onSubmit={handleSubmit(login)}>
           <h2 className="pb-2 text-center font-bold text-slate-700">Login</h2>
-          {/* Email / Username container */}
-          <div className="relative mb-6 mt-5">
-            <input
-              className={`peer mt-2 w-full border-b-[.015rem] border-b-primary bg-transparent pb-1 pl-2 pr-12 pt-2 leading-[1] text-[--slate-800] outline-none placeholder:text-transparent ${
-                errors.email
-                  ? "placeholder-shown:border-b-red-500 focus:border-b-red-500"
-                  : "placeholder-shown:border-b-slate-600 focus:border-b-primary"
-              } `}
-              type="text"
-              id="loginEmail"
-              placeholder="Email"
-              {...register("email")}
-            />
-            <label
-              className="absolute -top-2 left-0 text-sm text-primary transition-all duration-200 ease-linear peer-placeholder-shown:top-4 peer-placeholder-shown:text-lg peer-placeholder-shown:text-slate-600 peer-focus:-top-2 peer-focus:text-sm peer-focus:text-primary"
-              htmlFor="loginEmail"
-            >
-              Email
-            </label>
-            {errors.email && (
-              <p className="text-xs text-red-500">{errors.email.message}</p>
-            )}
-          </div>
-          {/* password container */}
+          <InputLabel
+            type="email"
+            id="email"
+            placeholder=""
+            error={errors?.email?.message}
+            label="Email"
+            register={register}
+          />
 
-          <div className="relative mb-10">
-            <input
-              className={`peer w-full border-b-[.015rem] border-b-primary bg-transparent pl-2 pr-12 pt-2 text-slate-800 outline-none placeholder:text-transparent ${
-                errors.password
-                  ? "placeholder-shown:border-b-red-500 focus:border-b-red-500"
-                  : "placeholder-shown:border-b-slate-600 focus:border-b-primary"
-              } `}
-              type={isPasswordShown ? "text" : "password"}
-              placeholder=""
-              id="loginPassword"
-              {...register("password")}
-            />
-            {isPasswordShown ? (
-              <button
-                type="button"
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-primary peer-placeholder-shown:text-slate-400 peer-focus:text-primary"
-                onClick={() => setIsPasswordShown((prev) => !prev)}
-              >
-                <Unlock size={14} />
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-primary peer-placeholder-shown:text-slate-400 peer-focus:text-primary"
-                onClick={() => setIsPasswordShown((prev) => !prev)}
-              >
-                <Lock size={16} />
-              </button>
-            )}
-            <label
-              htmlFor="loginPassword"
-              className="absolute bottom-8 left-0 text-sm text-primary transition-all duration-200 peer-placeholder-shown:bottom-0 peer-placeholder-shown:text-lg peer-placeholder-shown:text-slate-600 peer-focus:bottom-8 peer-focus:text-sm peer-focus:text-primary"
-            >
-              Password
-            </label>
-            {errors.password && (
-              <p className="absolute text-xs text-red-500">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-          {/* {error && <p className="text-red-500"> {error} </p>} */}
+          <InputLabel
+            type="password"
+            id="password"
+            placeholder=""
+            error={errors?.password?.message}
+            label="Password"
+            register={register}
+          />
           <div className="mt-4 flex items-center justify-center">
             <Button
               className="w-full bg-primary text-white"
@@ -180,7 +127,17 @@ export default function LoginUser({ isLogin }: LoginProps) {
             Enter Your Email Address
           </h2>
 
-          <div className="relative mb-8 mt-5">
+          <InputLabel
+            type="email"
+            id="email"
+            placeholder=""
+            value={forgottenEmail.email}
+            onChange={(event) => handleForgottenEmailChange(event)}
+            error={forgottenEmail.error}
+            label="Email"
+          />
+
+          {/* <div className="relative mb-8 mt-5">
             <input
               className={`peer mt-2 w-full border-b-[.015rem] border-b-primary bg-transparent pb-1 pl-2 pr-12 pt-2 text-lg leading-[1] text-[--slate-800] outline-none placeholder:text-transparent ${
                 errors.email
@@ -206,7 +163,7 @@ export default function LoginUser({ isLogin }: LoginProps) {
           </div>
           {forgottenEmail.error && (
             <p className="text-center text-red-500"> {forgottenEmail.error} </p>
-          )}
+          )} */}
           <Button
             type="button"
             // onClick={sendResetLink}

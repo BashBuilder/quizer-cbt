@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Loader2, Lock, Mail, Unlock } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import InputLabel from "./input-label";
@@ -83,7 +83,7 @@ export default function LoginUser({ isLogin }: LoginProps) {
     >
       {!isPasswordForgotten ? (
         <form onSubmit={handleSubmit(login)}>
-          <h2 className="pb-2 text-center font-bold text-slate-700">Login</h2>
+          <h2 className="text-center font-bold text-slate-700">Login</h2>
           <InputLabel
             type="email"
             id="email"
@@ -126,7 +126,6 @@ export default function LoginUser({ isLogin }: LoginProps) {
           <h2 className="pb-2 text-center font-semibold text-slate-700">
             Enter Your Email Address
           </h2>
-
           <InputLabel
             type="email"
             id="email"

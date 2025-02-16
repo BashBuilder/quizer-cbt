@@ -9,10 +9,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ExamCalculator from "./ExamCalculator";
 import { Calculator } from "lucide-react";
+import { useSubmitQuestions } from "@/services/questions";
 
 const ExamHeader = () => {
   const [warningCount, setWarningCount] = useState(0);
   const [isCalculatorShown, setIsCalculatorShown] = useState(false);
+  const { mutate: submit, isPending: isSubmitting } = useSubmitQuestions();
 
   const router = useRouter();
 
@@ -42,13 +44,34 @@ const ExamHeader = () => {
 
   /** Ensures exam submission happens only once */
   const handleExamFinish = () => {
+    const storedQuestions = getItem(localstore.questions);
+    const storedOptions = getItem(localstore.testOptions);
     removeItem(localstore.time);
     removeItem(localstore.examStarted);
-    toast.warning("Submitting...");
+    const loadingSpinner = toast.loading("Submitting...");
 
-    setTimeout(() => {
-      window.location.href = "/quiz/result"; // Ensure redirect happens only once
-    }, 1000);
+    if (storedQuestions && storedOptions) {
+      submit(
+        { options: storedOptions, quiz: storedQuestions },
+        {
+          onSuccess: () => {
+            toast.success("Submitted successfully!");
+            setTimeout(() => {
+              window.location.href = "/quiz/result"; // Ensure redirect happens only once
+            }, 1000);
+          },
+          onError: () => {
+            toast.error("Failed to submit. Check your network.");
+          },
+          onSettled: () => {
+            toast.dismiss(loadingSpinner);
+          },
+        },
+      );
+    } else {
+      toast.error("No questions or options found to submit.");
+      toast.dismiss(loadingSpinner);
+    }
   };
 
   /** Prevents multiple warnings firing too fast */
@@ -90,11 +113,6 @@ const ExamHeader = () => {
   };
 
   /** Enable full-screen mode */
-  const enableFullScreen = () => {
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
-    }
-  };
 
   /** Attach event listeners */
   useEffect(() => {
@@ -104,8 +122,6 @@ const ExamHeader = () => {
     window.addEventListener("contextmenu", handleContextMenu);
     window.history.pushState(null, "", window.location.href);
     window.addEventListener("popstate", handleBackButton);
-
-    enableFullScreen();
 
     return () => {
       window.removeEventListener("beforeunload", handleWarnings);
@@ -129,6 +145,12 @@ const ExamHeader = () => {
 
   return (
     <header className="container fixed left-0 top-0 flex items-center justify-between gap-3 bg-primary px-4 py-4 md:gap-8 md:px-8">
+      {isSubmitting && (
+        <div className="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-black/80">
+          <p className="animate-pulse italic text-white"> Submitting... </p>
+        </div>
+      )}
+
       <div className="pointer-events-none text-white">
         <Logo />
       </div>
@@ -146,7 +168,7 @@ const ExamHeader = () => {
           startCountdown={true}
         />
       </div>
-      <Button variant="outline" size="sm">
+      <Button variant="outline" size="sm" onClick={handleExamFinish}>
         Submit
       </Button>
     </header>

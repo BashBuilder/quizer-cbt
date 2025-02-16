@@ -3,4 +3,5 @@ export const localstore = {
   questions: "quizer-question",
   time: "quizer-time",
   examStarted: "quizer-exam-started",
+  result: "quizer-result",
 };

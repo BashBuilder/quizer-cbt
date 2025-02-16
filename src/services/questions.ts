@@ -1,10 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "@/config/axios";
-import {
-  QuestionApiResponseType,
-  QuestionType,
-  SelectedOptionType,
-} from "@/__types__";
+import { QuestionType, SelectedOptionType } from "@/__types__";
 
 export const useGetRandomQuestions = () => {
   return useMutation({
@@ -45,8 +41,11 @@ export const useGetGroupOfQuestions = () => {
 export const useSubmitQuestions = () => {
   return useMutation({
     mutationFn: async (data: {
-      questions: QuestionApiResponseType[];
       options: SelectedOptionType[];
+      quiz: {
+        subject: string;
+        data: QuestionType[];
+      }[];
     }) => {
       try {
         const response = await axios.post("/question/submit", data);

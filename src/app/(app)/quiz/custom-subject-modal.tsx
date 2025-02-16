@@ -30,6 +30,12 @@ const SubjectSchema = z.object({
 
 export type QuizType = z.infer<typeof SubjectSchema>;
 
+const enableFullScreen = () => {
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  }
+};
+
 export function CustomSubjectModal() {
   const { mutate: fetchGroupOfSubjects, isPending: isFetchingQuestions } =
     useGetGroupOfQuestions();
@@ -55,6 +61,7 @@ export function CustomSubjectModal() {
       const timeInSeconds = data.time * 60;
       fetchGroupOfSubjects(payload, {
         onSuccess(response) {
+          enableFullScreen();
           saveItem(localstore.questions, response);
           saveItem(localstore.time, timeInSeconds);
           saveItem(localstore.examStarted, true);

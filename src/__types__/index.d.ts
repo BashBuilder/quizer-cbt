@@ -22,7 +22,6 @@ export interface QuestionType {
 
 interface QuestionApiResponseType {
   subject: string;
-  status: number;
   data: QuestionType[];
 }
 

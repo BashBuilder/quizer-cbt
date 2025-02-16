@@ -27,7 +27,7 @@ const InputLabel = ({
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
   return (
-    <div className="relative mb-6 mt-5">
+    <div className="relative mb-3">
       <input
         className={`peer mt-2 w-full border-b-[.015rem] border-b-primary bg-transparent pb-1 pl-2 pr-12 pt-2 leading-[1] text-[--slate-800] outline-none placeholder:text-transparent ${
           error

@@ -1,16 +1,35 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
+import Loading from "@/components/global/loading";
 import { Button } from "@/components/ui/button";
 import { localstore } from "@/data/constants";
 import { getItem } from "@/lib/auth";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
 export default function Result() {
-  const result: { subject: string; score: string }[] | undefined =
-    useMemo(() => {
-      return getItem(localstore.result);
-    }, []);
+  const [loading, setLoading] = useState(true);
+  const [result, setResult] = useState<
+    { subject: string; score: string }[] | undefined
+  >(undefined);
+
+  useEffect(() => {
+    const fetchResult = async () => {
+      const storedResult = await getItem(localstore.result);
+      setResult(storedResult);
+      setLoading(false);
+    };
+
+    fetchResult();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-[80vh] items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
 
   if (!result) {
     return (

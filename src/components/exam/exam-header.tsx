@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Logo from "../global/logo";
 import CounterDownTimer from "./countdown-timer";
 import { Button } from "../ui/button";
-import { getItem, removeItem } from "@/lib/auth";
+import { getItem, removeItem, saveItem } from "@/lib/auth";
 import { localstore } from "@/data/constants";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -14,14 +14,13 @@ import { useSubmitQuestions } from "@/services/questions";
 const ExamHeader = () => {
   const [warningCount, setWarningCount] = useState(0);
   const [isCalculatorShown, setIsCalculatorShown] = useState(false);
-  const { mutate: submit, isPending: isSubmitting } = useSubmitQuestions();
+  const { mutate: submit } = useSubmitQuestions();
 
   const router = useRouter();
 
   const isExamStarted = useMemo(() => getItem(localstore.examStarted), []);
   const time = useMemo(() => getItem(localstore.time) || 0, []);
 
-  /** Handle warning messages in sequence */
   useEffect(() => {
     if (warningCount === 1) {
       toast.error(
@@ -35,14 +34,13 @@ const ExamHeader = () => {
       toast.error("Your exam will be invalidated.");
       handleExamFinish();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [warningCount]);
 
-  /** Function to trigger warnings safely */
   const handleWarnings = () => {
-    setWarningCount((prev) => Math.min(prev + 1, 3)); // Prevents going above 3
+    setWarningCount((prev) => Math.min(prev + 1, 3));
   };
 
-  /** Ensures exam submission happens only once */
   const handleExamFinish = () => {
     const storedQuestions = getItem(localstore.questions);
     const storedOptions = getItem(localstore.testOptions);
@@ -50,11 +48,16 @@ const ExamHeader = () => {
     removeItem(localstore.examStarted);
     const loadingSpinner = toast.loading("Submitting...");
 
+    const questions = Array.isArray(storedQuestions)
+      ? [...storedQuestions]
+      : [storedQuestions];
+
     if (storedQuestions && storedOptions) {
       submit(
-        { options: storedOptions, quiz: storedQuestions },
+        { options: storedOptions, quiz: questions },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
+            saveItem(localstore.result, data);
             toast.success("Submitted successfully!");
             setTimeout(() => {
               window.location.href = "/quiz/result"; // Ensure redirect happens only once
@@ -112,8 +115,6 @@ const ExamHeader = () => {
     router.push("/exam");
   };
 
-  /** Enable full-screen mode */
-
   /** Attach event listeners */
   useEffect(() => {
     window.addEventListener("beforeunload", handleWarnings);
@@ -144,13 +145,7 @@ const ExamHeader = () => {
   }
 
   return (
-    <header className="container fixed left-0 top-0 flex items-center justify-between gap-3 bg-primary px-4 py-4 md:gap-8 md:px-8">
-      {isSubmitting && (
-        <div className="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-black/80">
-          <p className="animate-pulse italic text-white"> Submitting... </p>
-        </div>
-      )}
-
+    <header className="fixed left-0 top-0 mx-auto flex w-full items-center justify-between gap-3 bg-primary px-4 py-4 md:gap-8 md:px-8">
       <div className="pointer-events-none text-white">
         <Logo />
       </div>

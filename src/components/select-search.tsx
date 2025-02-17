@@ -57,7 +57,7 @@ export default function SelectSearch({ setOption, data }: SelectPropsType) {
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0"
+          className="z-[10000] w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0"
           align="start"
         >
           <Command>
@@ -73,6 +73,7 @@ export default function SelectSearch({ setOption, data }: SelectPropsType) {
                       setValue(currentValue === value ? "" : currentValue);
                       setOpen(false);
                     }}
+                    className="pointer-events-auto cursor-pointer"
                   >
                     {framework.label}
                     {value === framework.value && (

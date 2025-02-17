@@ -1,16 +1,15 @@
 "use client";
 import { QuestionApiResponseType } from "@/__types__";
-import ExamHeader from "@/components/exam/exam-header";
-import Loading from "@/components/global/loading";
+// import Loading from "@/components/global/loading";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import ExamModal from "./exam-modal";
+import SolutionModal from "./solution-modal";
 import { getItem } from "@/lib/auth";
 import { localstore } from "@/data/constants";
 import { cn } from "@/lib/utils";
 
 const Exam = () => {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [currentSubject, setCurrentSubject] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [questions, setQuestions] = useState<
@@ -25,22 +24,27 @@ const Exam = () => {
         Array.isArray(storedQuestion) ? [...storedQuestion] : [storedQuestion],
       );
       setCurrentSubject(storedQuestion[0].subject);
-      setLoading(false);
+      // setLoading(false);
     };
 
     fetchQuestions();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex h-[60vh] items-center justify-center">
-        <Loading />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex h-[60vh] items-center justify-center">
+  //       <Loading />
+  //     </div>
+  //   );
+  // }
 
   if (!questions) {
-    return <div>no Questions</div>;
+    return (
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-4">
+        <p>No Questions</p>
+        <Button>Home</Button>
+      </div>
+    );
   }
 
   const handleSelectSubject = (subject: string) => {
@@ -57,12 +61,9 @@ const Exam = () => {
 
   return (
     <main className="container mx-auto">
-      <ExamHeader />
-
-      <div className="px-4 pt-10 md:px-8">
-        <section className="mx-auto flex max-w-screen-lg flex-col gap-4 pt-12">
-          {/* buutons */}
-          <div>
+      <div className="px-4 py-4 md:px-8">
+        <section className="mx-auto flex max-w-screen-lg flex-col gap-4">
+          <div className="flex gap-2">
             {questions.map((question) => (
               <Button
                 key={question.subject}
@@ -80,7 +81,7 @@ const Exam = () => {
           </div>
 
           {/* Question */}
-          <ExamModal data={questions[currentQuestion]} />
+          <SolutionModal data={questions[currentQuestion]} />
         </section>
       </div>
     </main>

@@ -18,7 +18,7 @@ const ExamHeader = () => {
 
   const router = useRouter();
 
-  const isExamStarted = useMemo(() => getItem(localstore.examStarted), []);
+  // const isExamStarted = useMemo(() => getItem(localstore.examStarted), []);
   const time = useMemo(() => getItem(localstore.time) || 0, []);
 
   useEffect(() => {
@@ -134,15 +134,7 @@ const ExamHeader = () => {
     // eslint-disable-next-line
   }, []);
 
-  if (!isExamStarted) {
-    return (
-      <header className="container fixed left-0 top-0 bg-primary px-8 py-4">
-        <div className="pointer-events-none text-white">
-          <Logo />
-        </div>
-      </header>
-    );
-  }
+  // if (!isExamStarted) return router.push("/");
 
   return (
     <header className="fixed left-0 top-0 mx-auto flex w-full items-center justify-between gap-3 bg-primary px-4 py-4 md:gap-8 md:px-8">

@@ -71,7 +71,7 @@ export default function Result() {
             </p>
           )}
           <div className="my-10 flex gap-10">
-            <Link href="/exam">
+            <Link href="/solution">
               <Button variant="outline" size="sm">
                 View Solution
               </Button>

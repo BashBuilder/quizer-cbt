@@ -7,11 +7,11 @@ import {
 } from "@/__types__";
 import { Button } from "@/components/ui/button";
 import { localstore } from "@/data/constants";
-import { getItem, saveItem } from "@/lib/auth";
+import { getItem } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useMemo, useState } from "react";
 
-const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
+const SolutionModal = ({ data }: { data: QuestionApiResponseType }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<SelectedOptionType[]>(
     [],
@@ -24,31 +24,6 @@ const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
 
   const handleRandomQuestion = (num: number) => setCurrentQuestionIndex(num);
 
-  const updateAnswers = (num: number, option: string) => {
-    const subject = data.subject;
-    setSelectedOption((prev) => {
-      const options: SelectedOptionType[] = [];
-      let found = false;
-
-      prev.forEach((subj) => {
-        if (subj.subject === subject) {
-          found = true;
-          const updatedOptions = subj.option.filter((opt) => opt.num !== num);
-          options.push({
-            ...subj,
-            option: [...updatedOptions, { num, option }],
-          });
-        } else {
-          options.push(subj);
-        }
-      });
-      if (!found) {
-        options.push({ subject, option: [{ num, option }] });
-      }
-      return options;
-    });
-  };
-
   useEffect(() => {
     const options = getItem(localstore.testOptions);
     if (options && options.length) {
@@ -56,15 +31,28 @@ const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (selectedOption.length) {
-      saveItem(localstore.testOptions, selectedOption);
-    }
-  }, [selectedOption]);
-
   return (
-    <section className="mx-auto flex w-11/12 max-w-screen-lg flex-col gap-4">
-      <div className="mb-4 flex flex-col gap-4 rounded-xl bg-background p-4 shadow-xl md:mb-10 md:px-20 md:py-10">
+    <section className="mx-auto flex w-full max-w-screen-lg flex-col gap-4">
+      {questions.map((question, qIndex) => {
+        return (
+          <article
+            key={qIndex}
+            className={` ${qIndex === currentQuestionIndex ? "flex flex-col gap-4" : "hidden"} `}
+          >
+            {question.solution && (
+              <div className="flex flex-col gap-4 rounded-xl bg-background p-4 shadow md:px-20 md:py-10">
+                <p className="text-xl font-semibold">Explanation :</p>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: question.solution,
+                  }}
+                />
+              </div>
+            )}
+          </article>
+        );
+      })}
+      <div className="flex flex-col gap-4 rounded-xl bg-background p-4 shadow md:px-20 md:py-10">
         {questions.map((question, qIndex) => {
           return (
             <article
@@ -76,7 +64,7 @@ const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
                   .toLowerCase()
                   .includes("solution") && (
                   <p
-                    className="text-xl font-semibold first-letter:capitalize"
+                    className="text-lg font-semibold first-letter:capitalize"
                     dangerouslySetInnerHTML={{
                       __html: question.section,
                     }}
@@ -85,10 +73,10 @@ const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
 
               <div className="flex flex-col gap-4">
                 <div className="flex gap-1">
-                  <p className="text-xl">{currentQuestionIndex + 1}.</p>
+                  <p className="text-lg">{currentQuestionIndex + 1}.</p>
                   {question.question && (
                     <p
-                      className="text-xl"
+                      className="text-lg"
                       dangerouslySetInnerHTML={{
                         __html: question.question,
                       }}
@@ -112,22 +100,39 @@ const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
                     return (
                       <button
                         key={index}
+                        disabled
                         className={cn(
-                          "rounded-md bg-primary/5 px-4 py-2 text-left transition-colors duration-300 hover:bg-primary/10",
+                          "rounded-md bg-primary/5 px-4 py-2 text-left transition-colors duration-300",
                           {
-                            "bg-primary text-white hover:bg-primary/90":
-                              selectedOption
+                            "bg-green-500 text-white": selectedOption
+                              .find((option) => option.subject === data.subject)
+                              ?.option.some(
+                                (item) =>
+                                  item.num === qIndex + 1 &&
+                                  item.option === opt &&
+                                  opt === question.answer,
+                              ),
+                            "bg-red-500 text-white": selectedOption
+                              .find((option) => option.subject === data.subject)
+                              ?.option.some(
+                                (item) =>
+                                  item.num === qIndex + 1 &&
+                                  item.option === opt &&
+                                  opt !== question.answer,
+                              ),
+                            "bg-green-500 text-white hover:bg-green-500":
+                              opt === question.answer &&
+                              !selectedOption
                                 .find(
                                   (option) => option.subject === data.subject,
                                 )
                                 ?.option.some(
                                   (item) =>
                                     item.num === qIndex + 1 &&
-                                    item.option === opt,
+                                    item.option === question.answer,
                                 ),
                           },
                         )}
-                        onClick={() => updateAnswers(qIndex + 1, opt)}
                       >
                         <span dangerouslySetInnerHTML={{ __html: opt }} />
                         <span className="pr-4">.</span>
@@ -164,17 +169,28 @@ const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
         </div>
       </div>
       {/* the lower question navigation pane  */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(40px,1fr))] justify-center gap-4 rounded-xl bg-background px-4 py-4 shadow-xl md:p-10 md:px-8">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(40px,1fr))] justify-center gap-4 rounded-xl bg-background px-4 py-4 shadow md:p-10 md:px-8">
         {questions.map((_, index) => {
           return (
             <Button
               key={index}
               className={cn("bg-primary/10 text-primary hover:bg-primary/20", {
+                "bg-green-500 text-white": !!selectedOption
+                  ?.find((item) => item.subject === data.subject)
+                  ?.option.find(
+                    (option) =>
+                      option.num === index + 1 &&
+                      option.option === questions[index].answer,
+                  ),
+                "bg-red-500 text-white": !!selectedOption
+                  ?.find((item) => item.subject === data.subject)
+                  ?.option.find(
+                    (option) =>
+                      option.num === index + 1 &&
+                      option.option !== questions[index].answer,
+                  ),
                 "bg-primary text-white hover:bg-primary/90":
-                  index === currentQuestionIndex ||
-                  !!selectedOption
-                    ?.find((item) => item.subject === data.subject)
-                    ?.option.find((option) => option.num === index + 1),
+                  index === currentQuestionIndex,
               })}
               size="icon"
               onClick={() => handleRandomQuestion(index)}
@@ -188,4 +204,4 @@ const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
   );
 };
 
-export default ExamModal;
+export default SolutionModal;

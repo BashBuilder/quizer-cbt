@@ -1,7 +1,7 @@
 "use client";
 import { QuestionApiResponseType } from "@/__types__";
 import ExamHeader from "@/components/exam/exam-header";
-import Loading from "@/components/global/loading";
+// import Loading from "@/components/global/loading";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import ExamModal from "./exam-modal";
@@ -10,7 +10,7 @@ import { localstore } from "@/data/constants";
 import { cn } from "@/lib/utils";
 
 const Exam = () => {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [currentSubject, setCurrentSubject] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [questions, setQuestions] = useState<
@@ -25,19 +25,19 @@ const Exam = () => {
         Array.isArray(storedQuestion) ? [...storedQuestion] : [storedQuestion],
       );
       setCurrentSubject(storedQuestion[0].subject);
-      setLoading(false);
+      // setLoading(false);
     };
 
     fetchQuestions();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex h-[60vh] items-center justify-center">
-        <Loading />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex h-[60vh] items-center justify-center">
+  //       <Loading />
+  //     </div>
+  //   );
+  // }
 
   if (!questions) {
     return <div>no Questions</div>;

@@ -62,7 +62,7 @@ const Exam = () => {
       <div className="px-4 pt-10 md:px-8">
         <section className="mx-auto flex max-w-screen-lg flex-col gap-4 pt-12">
           {/* buutons */}
-          <div>
+          <div className="flex gap-2">
             {questions.map((question) => (
               <Button
                 key={question.subject}

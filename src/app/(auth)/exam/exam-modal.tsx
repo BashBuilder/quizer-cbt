@@ -63,8 +63,8 @@ const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
   }, [selectedOption]);
 
   return (
-    <section className="mx-auto flex w-11/12 max-w-screen-lg flex-col gap-4">
-      <div className="mb-4 flex flex-col gap-4 rounded-xl bg-background p-4 shadow-xl md:mb-10 md:px-20 md:py-10">
+    <section className="mx-auto flex w-full max-w-screen-lg flex-col gap-4">
+      <div className="flex flex-col gap-4 rounded-xl bg-background p-4 shadow md:px-20 md:py-10">
         {questions.map((question, qIndex) => {
           return (
             <article
@@ -164,7 +164,7 @@ const ExamModal = ({ data }: { data: QuestionApiResponseType }) => {
         </div>
       </div>
       {/* the lower question navigation pane  */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(40px,1fr))] justify-center gap-4 rounded-xl bg-background px-4 py-4 shadow-xl md:p-10 md:px-8">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(40px,1fr))] justify-center gap-4 rounded-xl bg-background px-4 py-4 shadow md:p-10 md:px-8">
         {questions.map((_, index) => {
           return (
             <Button

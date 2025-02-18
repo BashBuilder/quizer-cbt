@@ -59,7 +59,7 @@ export function CustomSubjectModal() {
       };
       const loading = toast.loading("loading...");
       const timeInSeconds = data.time * 60;
-      fetchGroupOfSubjects(payload, {
+      await fetchGroupOfSubjects(payload, {
         onSuccess(response) {
           saveItem(localstore.questions, response);
           saveItem(localstore.time, timeInSeconds);

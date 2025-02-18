@@ -12,10 +12,15 @@ import {
 import { LoaderIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { subjects as availableSubjects } from "@/data/data";
+import { saveItem } from "@/lib/auth";
+import { localstore } from "@/data/constants";
+import { toast } from "sonner";
+import { useGetGroupOfQuestions } from "@/services/questions";
 
 export default function SetupForm() {
   const [subjects, setSubjects] = useState<string[]>(["english"]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutateAsync: fetchGroupOfSubjects } = useGetGroupOfQuestions();
 
   // adjust the selected subjects
   const adjustSubject = (subject: string) => {
@@ -31,8 +36,29 @@ export default function SetupForm() {
   const startExam = async () => {
     try {
       setIsSubmitting(true);
-      console.log(subjects);
+      const payload = {
+        subjects: subjects,
+        number: 40,
+      };
+      const loading = toast.loading("loading...");
+      const timeInSeconds = 60 * 60 * 2;
+      await fetchGroupOfSubjects(payload, {
+        onSuccess(response) {
+          saveItem(localstore.questions, response);
+          saveItem(localstore.time, timeInSeconds);
+          saveItem(localstore.examStarted, true);
+          toast.success("Starting...");
+          window.location.href = "/exam";
+        },
+        onError(error) {
+          toast.error(error.message || "Failed to fetch..");
+        },
+        onSettled() {
+          toast.dismiss(loading);
+        },
+      });
     } catch (error) {
+      toast.error((error as Error).message || "The error from fetching is ");
       console.error("The error from fetching is ", error);
     } finally {
       setIsSubmitting(false);

@@ -8,6 +8,8 @@ import { cookies } from "next/headers";
 import { userStore } from "@/data/constants";
 import { Logout } from "./logout";
 
+export const dynamic = "force-dynamic";
+
 const Navbar = async () => {
   const cookie = await cookies();
   const username = cookie.get(userStore.username)?.value;

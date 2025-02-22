@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
 import { logout } from "@/services/auth";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   username: string | undefined;
@@ -31,6 +31,7 @@ export function Sidebar({ username, token }: SidebarProps) {
     logout();
     setOpen(false);
     router.push("/");
+    router.refresh();
   };
 
   return (

@@ -25,6 +25,7 @@ export function Logout({ username }: LogoutProps) {
     logout();
     setOpen(false);
     router.push("/");
+    router.refresh();
   };
 
   return (

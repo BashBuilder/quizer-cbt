@@ -7,18 +7,34 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { AlignRight } from "lucide-react";
+import { AlignRight, User } from "lucide-react";
 import Logo from "../global/logo";
 import { navLinks } from "@/data/links";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useState } from "react";
+import { logout } from "@/services/auth";
+import { useRouter } from "next/router";
 
-export function Sidebar() {
+interface SidebarProps {
+  username: string | undefined;
+  token: string | undefined;
+}
+
+export function Sidebar({ username, token }: SidebarProps) {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    setOpen(false);
+    router.push("/");
+  };
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <button>
           <AlignRight />
@@ -46,17 +62,31 @@ export function Sidebar() {
           ))}
         </div>
 
-        <div className="mt-16 flex w-full flex-col gap-4">
-          <Link href="/auth?login=false">
-            <Button variant="outline" size="sm" className="w-full">
-              Register
-            </Button>
-          </Link>
-          <Link href="/auth?login=true">
-            <Button size="sm" className="w-full">
-              Login
-            </Button>
-          </Link>
+        <div className="mt-16">
+          {token ? (
+            <div className="flex flex-col gap-2">
+              <p className="flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white">
+                <User size={16} />
+                {username}
+              </p>
+              <Button variant="secondary" onClick={handleLogout}>
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <div className="flex w-full flex-col gap-4">
+              <Link href="/auth?login=false">
+                <Button variant="outline" size="sm" className="w-full">
+                  Register
+                </Button>
+              </Link>
+              <Link href="/auth?login=true">
+                <Button size="sm" className="w-full">
+                  Login
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </SheetContent>
     </Sheet>

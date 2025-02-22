@@ -58,12 +58,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${monasans.variable} mx-auto max-w-screen-2xl antialiased`}
+        className={`${monasans.className} mx-auto max-w-screen-2xl antialiased`}
       >
-        <QueryProvider>
-          <Toaster duration={8} richColors position="bottom-right" />
-          {children}
-        </QueryProvider>
+        <Toaster
+          richColors
+          position="top-right"
+          duration={8}
+          visibleToasts={5}
+        />
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

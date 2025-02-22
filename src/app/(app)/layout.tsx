@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Header from "@/components/layout/header";
+import Navbar from "@/components/layout/navbar";
 
 export const metadata: Metadata = {
   title: "Quizer - Practice JAMB, WAEC & General Quizzes for Free",
@@ -50,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
+        <Navbar />
         {children}
       </body>
     </html>

@@ -5,6 +5,7 @@ import LoginUser from "./login";
 import SignupUser from "./signup";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/global/logo";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -37,7 +38,9 @@ export default function Auth() {
                 },
               )}
             >
-              <h1 className="text-white">Quizer</h1>
+              <div className="pointer-events-none text-white">
+                <Logo />
+              </div>
               <Button
                 className="border-2 border-white bg-transparent font-semibold text-white transition duration-300 hover:border-violet-400 hover:bg-violet-400"
                 onClick={() => setIsLogin(false)}
@@ -59,7 +62,9 @@ export default function Auth() {
                 },
               )}
             >
-              <h1 className="text-white">Quizer</h1>
+              <div className="pointer-events-none text-white">
+                <Logo />
+              </div>
               <Button
                 className="border-2 border-white bg-transparent font-semibold text-white transition duration-300 hover:border-violet-400 hover:bg-violet-400"
                 onClick={() => setIsLogin(true)}

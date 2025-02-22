@@ -32,3 +32,10 @@ interface SelectedOptionType {
     option: string;
   }[];
 }
+
+interface LoginResponse {
+  _id: string;
+  username: string;
+  email: string;
+  token: string;
+}

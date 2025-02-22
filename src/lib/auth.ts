@@ -1,34 +1,34 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { Cookies } from "react-cookie";
-// import { decrypt, encrypt } from "./encryption";
+import { Cookies } from "react-cookie";
+import { decrypt, encrypt } from "./encryption";
 // import jwt from "jsonwebtoken";
 // import { toast } from "sonner";
 
 import { localstore } from "@/data/constants";
 
-// const cookie = new Cookies();
+const cookie = new Cookies();
 
-// export const setToken = (key: string, token: string) => {
-//   const currentDate = new Date();
-//   const expirationDate = new Date(currentDate);
-//   expirationDate.setMinutes(currentDate.getMinutes() + 30);
-//   cookie.set(key, encrypt(JSON.stringify(token)), {
-//     httpOnly: false,
-//     secure: true,
-//     sameSite: "lax",
-//     expires: expirationDate,
-//     path: "/",
-//   });
-// };
+export const setToken = (key: string, token: string) => {
+  const currentDate = new Date();
+  const expirationDate = new Date(currentDate);
+  expirationDate.setMinutes(currentDate.getHours() + 10);
+  cookie.set(key, encrypt(JSON.stringify(token)), {
+    httpOnly: false,
+    secure: true,
+    sameSite: "lax",
+    expires: expirationDate,
+    path: "/",
+  });
+};
 
-// export const getToken = (key: string) => {
-//   const cookieData = cookie.get(key);
-//   return decrypt(cookieData) ?? null;
-// };
+export const getToken = (key: string) => {
+  const cookieData = cookie.get(key);
+  return decrypt(cookieData) ?? null;
+};
 
-// export const removeToken = (key: string) => {
-//   cookie.remove(key);
-// };
+export const removeToken = (key: string) => {
+  cookie.remove(key);
+};
 
 // // export const removeTokens = () => {
 // //   removeToken("entityUserToken");
@@ -38,22 +38,22 @@ import { localstore } from "@/data/constants";
 // //   removeToken("isTeamMember");
 // // };
 
-// export const setCookie = (key: string, value: string) => {
-//   cookie.set(key, value, {
-//     httpOnly: false,
-//     secure: true,
-//     sameSite: "lax",
-//     path: "/",
-//   });
-// };
+export const setCookie = (key: string, value: string) => {
+  cookie.set(key, value, {
+    httpOnly: false,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+  });
+};
 
-// export const getCookie = (key: string) => {
-//   return cookie.get(key);
-// };
+export const getCookie = (key: string) => {
+  return cookie.get(key);
+};
 
-// export const removeCookie = (key: string) => {
-//   cookie.remove(key);
-// };
+export const removeCookie = (key: string) => {
+  cookie.remove(key);
+};
 
 // export const isTokenExpired = (key: string): boolean => {
 //   const token = cookie.get(key);

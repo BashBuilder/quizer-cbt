@@ -4,4 +4,6 @@ export const localstore = {
   time: "quizer-time",
   examStarted: "quizer-exam-started",
   result: "quizer-result",
+  token: "quizer-token",
+  username: "quizer-username",
 };

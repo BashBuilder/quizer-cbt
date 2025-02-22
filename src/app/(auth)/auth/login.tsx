@@ -7,6 +7,9 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import InputLabel from "./input-label";
+import { loginUser } from "@/services/auth";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 // import { toast } from "sonner";
 
 interface LoginProps {
@@ -20,6 +23,8 @@ export default function LoginUser({ isLogin }: LoginProps) {
     error: "",
     email: "",
   });
+  const router = useRouter();
+
   const loginSchema = z.object({
     email: z
       .string()
@@ -67,11 +72,11 @@ export default function LoginUser({ isLogin }: LoginProps) {
 
   const login: SubmitHandler<LoginSchemaType> = async (data) => {
     try {
-      console.log(data);
-      // const { email, password } = data;
-      // await login(email, password);
+      await loginUser(data);
+      toast.success("Login Successful");
+      router.push("/");
     } catch (error) {
-      console.log(error);
+      toast.error((error as Error).message);
     }
   };
 

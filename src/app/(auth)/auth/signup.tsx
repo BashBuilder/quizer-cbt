@@ -5,6 +5,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 // import { useAuthContext } from "../hooks/authContext";
 import InputLabel from "./input-label";
+import { registerUser } from "@/services/auth";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 interface LoginProps {
   isLogin: boolean;
@@ -47,17 +51,18 @@ export default function SignupUser({ isLogin }: LoginProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginSchemaType>({ resolver: zodResolver(loginSchema) });
 
-  const signupUser: SubmitHandler<LoginSchemaType> = (data) => {
+  const signupUser: SubmitHandler<LoginSchemaType> = async (data) => {
     try {
-      console.log(data);
+      const response = await registerUser(data);
+      toast.success(response.message);
     } catch (error) {
-      console.log(error);
+      toast.error((error as Error).message);
     }
-    // signup(data.email, data.password, data.username);
   };
+
   return (
     <form
       className={`relative flex flex-col items-center overflow-hidden px-4 pt-8 transition-all duration-500 ease-in-out md:justify-center md:pt-0 xl:px-16 ${
@@ -70,7 +75,7 @@ export default function SignupUser({ isLogin }: LoginProps) {
         type="email"
         id="email"
         placeholder=""
-        error={errors?.email?.message}
+        // error={errors?.email?.message}
         label="Email"
         register={register}
       />
@@ -78,7 +83,7 @@ export default function SignupUser({ isLogin }: LoginProps) {
         type="text"
         id="username"
         placeholder=""
-        error={errors?.username?.message}
+        // error={errors?.username?.message}
         label="Username"
         register={register}
       />
@@ -86,7 +91,7 @@ export default function SignupUser({ isLogin }: LoginProps) {
         type="password"
         id="password"
         placeholder=""
-        error={errors?.password?.message}
+        // error={errors?.password?.message}
         label="Password"
         register={register}
       />
@@ -94,7 +99,7 @@ export default function SignupUser({ isLogin }: LoginProps) {
         type="password"
         id="confirmPassword"
         placeholder=""
-        error={errors?.password?.message}
+        // error={errors?.password?.message}
         label="Confirm Password"
         register={register}
       />
@@ -105,21 +110,20 @@ export default function SignupUser({ isLogin }: LoginProps) {
             ? errors.email.message
             : errors.password
               ? errors.password.message
-              : "Kindly Fill all the forms"}
+              : "Kindly Fill all the feilds"}
         </p>
       ) : (
         errors.confirmPassword && (
-          <p className="text-center text-red-500">
+          <p className="py-2 text-center text-sm text-red-500">
             {errors.confirmPassword.message}
           </p>
         )
       )}
-      {/* <div className="flex flex-col items-center justify-center">
-        {error && <p className="text-center text-red-500">{error}</p>}
-        <button className="mt-2 bg-primary text-white ">
-          {loading ? <Loader2 className="animate-spin" /> : "Sign Up"}
-        </button>
-      </div> */}
+      <div className="flex flex-col items-center justify-center">
+        <Button>
+          {isSubmitting ? <Loader2 className="animate-spin" /> : "Sign Up"}
+        </Button>
+      </div>
     </form>
   );
 }

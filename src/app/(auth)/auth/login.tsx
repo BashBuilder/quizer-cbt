@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +8,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import InputLabel from "./input-label";
-import { loginUser } from "@/services/auth";
+import { useLoginUserMutation } from "@/services/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 // import { toast } from "sonner";
@@ -24,6 +25,8 @@ export default function LoginUser({ isLogin }: LoginProps) {
     email: "",
   });
   const router = useRouter();
+
+  const [loginUser] = useLoginUserMutation();
 
   const loginSchema = z.object({
     email: z
@@ -72,11 +75,11 @@ export default function LoginUser({ isLogin }: LoginProps) {
 
   const login: SubmitHandler<LoginSchemaType> = async (data) => {
     try {
-      await loginUser(data);
+      await loginUser(data).unwrap();
       toast.success("Login Successful");
       router.push("/");
-    } catch (error) {
-      toast.error((error as Error).message);
+    } catch (error: any) {
+      toast.error(error.data.message);
     }
   };
 
@@ -88,7 +91,9 @@ export default function LoginUser({ isLogin }: LoginProps) {
     >
       {!isPasswordForgotten ? (
         <form onSubmit={handleSubmit(login)}>
-          <h2 className="text-center font-bold text-slate-700">Login</h2>
+          <h2 className="pb-2 text-center text-2xl font-medium text-slate-700">
+            Login
+          </h2>
           <InputLabel
             type="email"
             id="email"
@@ -114,7 +119,7 @@ export default function LoginUser({ isLogin }: LoginProps) {
               {isSubmitting ? <Loader2 className="animate-spin" /> : "Login"}
             </Button>
           </div>
-          <div className="mt-2 flex items-center justify-between">
+          {/* <div className="mt-2 flex items-center justify-between">
             <p>Forgotten Password?</p>
             <Button
               variant="link"
@@ -124,7 +129,7 @@ export default function LoginUser({ isLogin }: LoginProps) {
             >
               Click here
             </Button>
-          </div>
+          </div> */}
         </form>
       ) : (
         <div className="flex max-w-[23rem] flex-col">

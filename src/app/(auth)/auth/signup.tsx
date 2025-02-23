@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -5,7 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 // import { useAuthContext } from "../hooks/authContext";
 import InputLabel from "./input-label";
-import { registerUser } from "@/services/auth";
+import { useRegisterUserMutation } from "@/services/auth";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -15,8 +16,7 @@ interface LoginProps {
 }
 
 export default function SignupUser({ isLogin }: LoginProps) {
-  // const { signup, signupState } = useAuthContext();
-  // const { loading, error } = signupState;
+  const [registerUser] = useRegisterUserMutation();
 
   const loginSchema = z
     .object({
@@ -56,21 +56,26 @@ export default function SignupUser({ isLogin }: LoginProps) {
 
   const signupUser: SubmitHandler<LoginSchemaType> = async (data) => {
     try {
-      const response = await registerUser(data);
+      const payload = {
+        email: data.email,
+        username: data.username,
+        password: data.password,
+      };
+      const response = await registerUser(payload).unwrap();
       toast.success(response.message);
-    } catch (error) {
-      toast.error((error as Error).message);
+    } catch (error: any) {
+      toast.error(error.data.message);
     }
   };
 
   return (
     <form
-      className={`relative flex flex-col items-center overflow-hidden px-4 pt-8 transition-all duration-500 ease-in-out md:justify-center md:pt-0 xl:px-16 ${
+      className={`relative flex flex-col items-center overflow-hidden px-4 transition-all duration-500 ease-in-out max-sm:my-auto max-sm:w-full md:justify-center md:pt-0 xl:px-6 ${
         !isLogin ? "delay-500" : "pointer-events-none z-[1] opacity-0 delay-100"
       } `}
       onSubmit={handleSubmit(signupUser)}
     >
-      <h2 className="pb-2 font-bold text-slate-700">Sign Up</h2>
+      <h2 className="pb-2 text-2xl font-medium text-slate-700">Sign Up</h2>
       <InputLabel
         type="email"
         id="email"
@@ -100,12 +105,12 @@ export default function SignupUser({ isLogin }: LoginProps) {
         id="confirmPassword"
         placeholder=""
         // error={errors?.password?.message}
-        label="Confirm Password"
+        label="Confirm password"
         register={register}
       />
 
       {errors.email || errors.password || errors.username ? (
-        <p className="text-center text-rose-500">
+        <p className="py-2 text-center text-sm text-red-500">
           {errors.email
             ? errors.email.message
             : errors.password

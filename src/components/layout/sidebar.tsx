@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
-import { logout } from "@/services/auth";
+import { useLogoutUserMutation } from "@/services/auth";
 import { useRouter } from "next/navigation";
 
 interface SidebarProps {
@@ -26,12 +26,12 @@ export function Sidebar({ username, token }: SidebarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const [logout] = useLogoutUserMutation();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     setOpen(false);
     router.push("/");
-    router.refresh();
   };
 
   return (

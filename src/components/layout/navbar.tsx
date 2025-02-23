@@ -1,19 +1,15 @@
+"use client";
 import React from "react";
 import Logo from "../global/logo";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Sidebar } from "./sidebar";
 import NavLinks from "./nav-links";
-import { cookies } from "next/headers";
-import { userStore } from "@/data/constants";
 import { Logout } from "./logout";
+import useAuth from "@/hooks/useAuth";
 
-export const dynamic = "force-dynamic";
-
-const Navbar = async () => {
-  const cookie = await cookies();
-  const username = cookie.get(userStore.username)?.value;
-  const token = cookie.get(userStore.token)?.value;
+const Navbar = () => {
+  const { token, username } = useAuth();
 
   return (
     <header className="shadow">

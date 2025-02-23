@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logout } from "@/services/auth";
+import { useLogoutUserMutation } from "@/services/auth";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -20,12 +20,12 @@ interface LogoutProps {
 export function Logout({ username }: LogoutProps) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const [logout] = useLogoutUserMutation();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout().unwrap();
     setOpen(false);
     router.push("/");
-    router.refresh();
   };
 
   return (

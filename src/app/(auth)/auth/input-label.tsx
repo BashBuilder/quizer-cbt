@@ -30,7 +30,7 @@ const InputLabel = ({
     <div className="mb-4">
       <div className="relative">
         <input
-          className={`peer mt-2 w-full border-b-[.015rem] border-b-primary bg-transparent pb-2 pl-2 pr-6 text-zinc-800 outline-none placeholder:text-transparent ${
+          className={`peer mt-2 w-full border-b-[.015rem] border-b-primary bg-transparent pb-2 pl-2 pr-6 text-sm text-zinc-800 outline-none placeholder:text-transparent ${
             error
               ? "placeholder-shown:border-b-red-500 focus:border-b-red-500"
               : "placeholder-shown:border-b-slate-600 focus:border-b-primary"
@@ -53,7 +53,7 @@ const InputLabel = ({
         )}
         <label
           htmlFor={id}
-          className={`absolute -top-2 left-0 text-xs text-primary transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-500 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-primary`}
+          className={`absolute -top-2 left-0 text-xs text-primary transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-sm peer-placeholder-shown:text-slate-500 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-primary`}
         >
           {label}
         </label>

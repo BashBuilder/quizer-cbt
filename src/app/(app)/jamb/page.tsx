@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
@@ -34,33 +35,24 @@ export default function SetupForm() {
   };
 
   const startExam = async () => {
+    const loading = toast.loading("loading...");
     try {
       setIsSubmitting(true);
       const payload = {
         subjects: subjects,
         number: 40,
       };
-      const loading = toast.loading("loading...");
       const timeInSeconds = 60 * 60 * 2;
-      await fetchGroupOfSubjects(payload, {
-        onSuccess(response) {
-          saveItem(localstore.questions, response);
-          saveItem(localstore.time, timeInSeconds);
-          saveItem(localstore.examStarted, true);
-          toast.success("Starting...");
-          window.location.href = "/exam";
-        },
-        onError(error) {
-          toast.error(error.message || "Failed to fetch..");
-        },
-        onSettled() {
-          toast.dismiss(loading);
-        },
-      });
-    } catch (error) {
-      toast.error((error as Error).message || "The error from fetching is ");
-      console.error("The error from fetching is ", error);
+      const response = await fetchGroupOfSubjects(payload);
+      saveItem(localstore.questions, response);
+      saveItem(localstore.time, timeInSeconds);
+      saveItem(localstore.examStarted, true);
+      toast.success("Starting...");
+      window.location.href = "/exam";
+    } catch (error: any) {
+      toast.error(error);
     } finally {
+      toast.dismiss(loading);
       setIsSubmitting(false);
     }
   };

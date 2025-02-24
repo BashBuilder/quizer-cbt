@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Logo from "@/components/global/logo";
@@ -31,8 +32,10 @@ const SubjectSchema = z.object({
 export type QuizType = z.infer<typeof SubjectSchema>;
 
 export function SingleSubjectModal() {
-  const { mutate: fetchRandomQuestion, isPending: isFetchingRandomQuestin } =
-    useGetRandomQuestions();
+  const {
+    mutateAsync: fetchRandomQuestion,
+    isPending: isFetchingRandomQuestin,
+  } = useGetRandomQuestions();
   const {
     register,
     handleSubmit,
@@ -45,38 +48,31 @@ export function SingleSubjectModal() {
   };
 
   const onSubmit: SubmitHandler<QuizType> = async (data) => {
+    const loading = toast.loading("loading...");
     try {
       removeItems();
       const payload = {
         subject: data.subject,
         number: data.number,
       };
-      const loading = toast.loading("loading...");
       const timeInSeconds = data.time * 60;
-      fetchRandomQuestion(payload, {
-        onSuccess(response) {
-          saveItem(localstore.questions, response);
-          saveItem(localstore.time, timeInSeconds);
-          saveItem(localstore.examStarted, true);
-          toast.success("Starting...");
-          window.location.href = "/exam";
-        },
-        onError(error) {
-          toast.error(error.message || "Failed to fetch..");
-        },
-        onSettled() {
-          toast.dismiss(loading);
-        },
-      });
-    } catch (error) {
-      toast.error((error as Error).message);
+      const response = await fetchRandomQuestion(payload);
+      saveItem(localstore.questions, response);
+      saveItem(localstore.time, timeInSeconds);
+      saveItem(localstore.examStarted, true);
+      toast.success("Starting...");
+      window.location.href = "/exam";
+    } catch (error: any) {
+      toast.error(error);
+    } finally {
+      toast.dismiss(loading);
     }
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="min-size-36 flex items-center justify-center rounded-lg bg-secondary p-20 text-xl font-medium text-primary shadow transition-all duration-300 hover:shadow-lg">
+        <button className="min-size-36 flex items-center justify-center rounded-lg bg-secondary p-20 text-xl font-medium text-primary shadow transition-all duration-300 hover:shadow-lg max-sm:w-full">
           Single
         </button>
       </DialogTrigger>

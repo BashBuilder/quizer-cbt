@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Multiselect from "@/components/multiselect";
@@ -37,7 +38,7 @@ export type QuizType = z.infer<typeof SubjectSchema>;
 // };
 
 export function CustomSubjectModal() {
-  const { mutate: fetchGroupOfSubjects, isPending: isFetchingQuestions } =
+  const { mutateAsync: fetchGroupOfSubjects, isPending: isFetchingQuestions } =
     useGetGroupOfQuestions();
   const {
     register,
@@ -51,38 +52,31 @@ export function CustomSubjectModal() {
   };
 
   const onSubmit: SubmitHandler<QuizType> = async (data) => {
+    const loading = toast.loading("loading...");
     try {
       removeItems();
       const payload = {
         subjects: data.subjects,
         number: data.number,
       };
-      const loading = toast.loading("loading...");
       const timeInSeconds = data.time * 60;
-      await fetchGroupOfSubjects(payload, {
-        onSuccess(response) {
-          saveItem(localstore.questions, response);
-          saveItem(localstore.time, timeInSeconds);
-          saveItem(localstore.examStarted, true);
-          toast.success("Starting...");
-          window.location.href = "/exam";
-        },
-        onError(error) {
-          toast.error(error.message || "Failed to fetch..");
-        },
-        onSettled() {
-          toast.dismiss(loading);
-        },
-      });
-    } catch (error) {
-      toast.error((error as Error).message);
+      const response = await fetchGroupOfSubjects(payload);
+      saveItem(localstore.questions, response);
+      saveItem(localstore.time, timeInSeconds);
+      saveItem(localstore.examStarted, true);
+      toast.success("Starting...");
+      window.location.href = "/exam";
+    } catch (error: any) {
+      toast.error(error);
+    } finally {
+      toast.dismiss(loading);
     }
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="min-size-36 flex items-center justify-center rounded-lg bg-primary/50 p-20 text-xl text-white shadow transition-all duration-300 hover:shadow-lg">
+        <button className="min-size-36 flex items-center justify-center rounded-lg bg-primary/50 p-20 text-xl text-white shadow transition-all duration-300 hover:shadow-lg max-sm:w-full">
           Multiple
         </button>
       </DialogTrigger>

@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "@/config/axios";
 import { QuestionType, SelectedOptionType } from "@/__types__";
+import { AxiosError } from "axios";
 
 export const useGetRandomQuestions = () => {
   return useMutation({
@@ -13,7 +14,11 @@ export const useGetRandomQuestions = () => {
         }>("/question/random", data);
         return response.data;
       } catch (error) {
-        throw error;
+        if (error instanceof AxiosError) {
+          throw error.response?.data.message || "Something went wrong";
+        } else {
+          throw "Something went wrong";
+        }
       }
     },
   });
@@ -32,7 +37,11 @@ export const useGetGroupOfQuestions = () => {
         >("/question/multiple", data);
         return response.data;
       } catch (error) {
-        throw error;
+        if (error instanceof AxiosError) {
+          throw error.response?.data.message || "Something went wrong";
+        } else {
+          throw "Something went wrong";
+        }
       }
     },
   });

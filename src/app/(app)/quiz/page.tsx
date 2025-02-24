@@ -12,7 +12,7 @@ const page = () => {
       </div>
       <div className="space-y-6">
         <h2 className="text-2xl font-medium text-zinc-700">
-          Practice Custom questions
+          Practice Questions for JAMB, WAEC
         </h2>
         <div className="flex flex-wrap gap-4">
           <SingleSubjectModal />

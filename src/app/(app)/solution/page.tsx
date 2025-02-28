@@ -80,6 +80,8 @@ const Exam = () => {
             ))}
           </div>
 
+          {/* added some ramdom comments */}
+
           {/* Question */}
           <SolutionModal data={questions[currentQuestion]} />
         </section>

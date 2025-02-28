@@ -17,6 +17,8 @@ const SolutionModal = ({ data }: { data: QuestionApiResponseType }) => {
     [],
   );
 
+  // added some comments
+
   const questions: QuestionType[] = useMemo(() => data.data, [data]);
 
   const handleNextQuestion = (num: number) =>

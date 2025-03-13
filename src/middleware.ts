@@ -4,7 +4,7 @@ import { userStore } from "./data/constants";
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get(userStore.token) || "";
-  if (!token) {
+  if (!token && !request.url.includes("/auth")) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
   if (request.url.includes("/auth") && token) {
@@ -14,5 +14,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/jamb", "/quiz", "/result", "/exam"],
+  matcher: ["/jamb", "/quiz", "/result", "/exam", "/auth"],
 };

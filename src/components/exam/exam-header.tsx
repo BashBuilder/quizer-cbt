@@ -62,7 +62,7 @@ const ExamHeader = () => {
             saveItem(localstore.result, data);
             toast.success("Submitted successfully!");
             setTimeout(() => {
-              window.location.href = "/quiz/result"; // Ensure redirect happens only once
+              window.location.href = "/quiz/result";
             }, 1000);
           },
           onError: () => {

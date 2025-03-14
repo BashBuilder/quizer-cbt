@@ -13,6 +13,7 @@ import { useSubmitQuestions } from "@/services/questions";
 
 const ExamHeader = () => {
   const [warningCount, setWarningCount] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCalculatorShown, setIsCalculatorShown] = useState(false);
   const { mutate: submit } = useSubmitQuestions();
 
@@ -42,6 +43,7 @@ const ExamHeader = () => {
   };
 
   const handleExamFinish = () => {
+    setIsSubmitting(true);
     const storedQuestions = getItem(localstore.questions);
     const storedOptions = getItem(localstore.testOptions);
     removeItem(localstore.time);
@@ -68,12 +70,14 @@ const ExamHeader = () => {
           },
           onSettled: () => {
             toast.dismiss(loadingSpinner);
+            setIsSubmitting(false);
           },
         },
       );
     } else {
       toast.error("No questions or options found to submit.");
       toast.dismiss(loadingSpinner);
+      setIsSubmitting(false);
     }
   };
 
@@ -117,6 +121,7 @@ const ExamHeader = () => {
 
   /** Attach event listeners */
   useEffect(() => {
+    if (isSubmitting) return;
     window.addEventListener("beforeunload", handleWarnings);
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("keydown", handleKeyDown);

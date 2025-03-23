@@ -2,6 +2,7 @@
 "use client";
 
 import Logo from "@/components/global/logo";
+import RequireSubscription from "@/components/global/require-subscription";
 import SelectSearch from "@/components/select-search";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,12 +13,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { localstore } from "@/data/constants";
+import { localstore, userStore } from "@/data/constants";
 import { subjects } from "@/data/data";
-import { removeItems, saveItem } from "@/lib/auth";
+import { getCookie, removeItems, saveItem } from "@/lib/auth";
 import { useGetRandomQuestions } from "@/services/questions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -32,6 +34,8 @@ const SubjectSchema = z.object({
 export type QuizType = z.infer<typeof SubjectSchema>;
 
 export function SingleSubjectModal() {
+  const [open, setOpen] = useState(false);
+
   const {
     mutateAsync: fetchRandomQuestion,
     isPending: isFetchingRandomQuestin,
@@ -48,6 +52,12 @@ export function SingleSubjectModal() {
   };
 
   const onSubmit: SubmitHandler<QuizType> = async (data) => {
+    // const count = getCookie(userStore.subscribeCount);
+
+    // if (!count.practice) {
+    // }
+    return setOpen(true);
+
     const loading = toast.loading("loading...");
     try {
       removeItems();
@@ -77,6 +87,7 @@ export function SingleSubjectModal() {
         </button>
       </DialogTrigger>
       <DialogContent className="w-11/12 max-sm:rounded-md">
+        <RequireSubscription open={open} setOpen={setOpen} />
         <DialogHeader className="flex flex-col items-center justify-center gap-2">
           <Logo />
           <DialogTitle className="text-center">

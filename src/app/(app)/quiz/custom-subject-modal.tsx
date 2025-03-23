@@ -12,15 +12,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { localstore } from "@/data/constants";
+import { localstore, userStore } from "@/data/constants";
 import { subjects } from "@/data/data";
-import { removeItems, saveItem } from "@/lib/auth";
+import { getCookie, removeItems, saveItem } from "@/lib/auth";
 import { useGetGroupOfQuestions } from "@/services/questions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import RequireSubscription from "@/components/global/require-subscription";
+import { useState } from "react";
 
 const SubjectSchema = z.object({
   subjects: z.array(z.string().min(1, "Subject is Required")),
@@ -31,13 +33,8 @@ const SubjectSchema = z.object({
 
 export type QuizType = z.infer<typeof SubjectSchema>;
 
-// const enableFullScreen = () => {
-//   if (document.documentElement.requestFullscreen) {
-//     document.documentElement.requestFullscreen();
-//   }
-// };
-
 export function CustomSubjectModal() {
+  const [open, setOpen] = useState(false);
   const { mutateAsync: fetchGroupOfSubjects, isPending: isFetchingQuestions } =
     useGetGroupOfQuestions();
   const {
@@ -52,6 +49,12 @@ export function CustomSubjectModal() {
   };
 
   const onSubmit: SubmitHandler<QuizType> = async (data) => {
+    const count = getCookie(userStore.subscribeCount);
+
+    if (!count.practice) {
+    }
+    return setOpen(true);
+
     const loading = toast.loading("loading...");
     try {
       removeItems();
@@ -81,6 +84,7 @@ export function CustomSubjectModal() {
         </button>
       </DialogTrigger>
       <DialogContent className="w-11/12 max-sm:rounded-md">
+        <RequireSubscription open={open} setOpen={setOpen} />
         <DialogHeader className="flex flex-col items-center justify-center gap-2">
           <Logo />
           <DialogTitle className="text-center">

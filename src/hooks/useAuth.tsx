@@ -7,7 +7,6 @@ import { login } from "./features/authSlice";
 
 const useAuth = () => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     const fetchToken = async () => {
       const token = document.cookie
@@ -16,18 +15,33 @@ const useAuth = () => {
       const username = document.cookie
         .split("; ")
         .find((row) => row.startsWith(userStore.username + "="));
-      if (token && username) {
+      const subscribeCount = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith(userStore.subscribeCount + "="));
+
+      if (token && username && subscribeCount) {
         const tokenValue = token.split("=")[1];
         const usernameValue = username.split("=")[1];
-        await dispatch(login({ token: tokenValue, username: usernameValue }));
+        const subscribeCountValue = JSON.parse(
+          decodeURIComponent(subscribeCount.split("=")[1]),
+        );
+        dispatch(
+          login({
+            token: tokenValue,
+            username: usernameValue,
+            subscribeCount: subscribeCountValue,
+          }),
+        );
       }
     };
     fetchToken();
   }, [dispatch]);
 
-  const { token, username } = useSelector((state: RootState) => state.auth);
+  const { token, username, subscribeCount } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
-  return { token, username };
+  return { token, username, subscribeCount };
 };
 
 export default useAuth;

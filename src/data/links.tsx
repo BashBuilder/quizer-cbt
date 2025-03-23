@@ -5,3 +5,11 @@ export const navLinks = [
   { label: "Practice", href: "/quiz" },
   { label: "Jamb cbt", href: "/jamb" },
 ];
+
+export const loggedInLinks = [
+  ...navLinks,
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+  },
+];

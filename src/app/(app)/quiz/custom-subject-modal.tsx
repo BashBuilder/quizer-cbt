@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { localstore, userStore } from "@/data/constants";
 import { subjects } from "@/data/data";
-import { getCookie, removeItems, saveItem } from "@/lib/auth";
+import { removeItems, saveItem } from "@/lib/auth";
 import { useGetGroupOfQuestions } from "@/services/questions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -23,6 +23,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 import RequireSubscription from "@/components/global/require-subscription";
 import { useState } from "react";
+import useAuth from "@/hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { updateCount } from "@/hooks/features/authSlice";
 
 const SubjectSchema = z.object({
   subjects: z.array(z.string().min(1, "Subject is Required")),
@@ -35,6 +38,8 @@ export type QuizType = z.infer<typeof SubjectSchema>;
 
 export function CustomSubjectModal() {
   const [open, setOpen] = useState(false);
+  const { subscribeCount } = useAuth();
+  const dispatch = useDispatch();
   const { mutateAsync: fetchGroupOfSubjects, isPending: isFetchingQuestions } =
     useGetGroupOfQuestions();
   const {
@@ -49,11 +54,9 @@ export function CustomSubjectModal() {
   };
 
   const onSubmit: SubmitHandler<QuizType> = async (data) => {
-    const count = getCookie(userStore.subscribeCount);
-
-    if (!count.practice) {
+    if (!subscribeCount || !subscribeCount.practice) {
+      return setOpen(true);
     }
-    return setOpen(true);
 
     const loading = toast.loading("loading...");
     try {
@@ -64,9 +67,14 @@ export function CustomSubjectModal() {
       };
       const timeInSeconds = data.time * 60;
       const response = await fetchGroupOfSubjects(payload);
-      saveItem(localstore.questions, response);
+      // @ts-expect-error "fix later"
+      saveItem(localstore.questions, response.data);
+      // @ts-expect-error "fix later"
+      setCookie(userStore.subscribeCount, JSON.stringify(response.updatedUser));
       saveItem(localstore.time, timeInSeconds);
       saveItem(localstore.examStarted, true);
+      // @ts-expect-error "fix later"
+      dispatch(updateCount(response.updatedUser));
       toast.success("Starting...");
       window.location.href = "/exam";
     } catch (error: any) {

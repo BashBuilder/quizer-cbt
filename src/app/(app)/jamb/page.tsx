@@ -13,12 +13,20 @@ import {
 import { LoaderIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { subjects as availableSubjects } from "@/data/data";
-import { saveItem } from "@/lib/auth";
-import { localstore } from "@/data/constants";
+import { saveItem, setCookie } from "@/lib/auth";
+import { localstore, userStore } from "@/data/constants";
 import { toast } from "sonner";
 import { useGetGroupOfQuestions } from "@/services/questions";
+import useAuth from "@/hooks/useAuth";
+import RequireSubscription from "@/components/global/require-subscription";
+import { useDispatch } from "react-redux";
+import { updateCount } from "@/hooks/features/authSlice";
 
 export default function SetupForm() {
+  const [open, setOpen] = useState(false);
+  const { subscribeCount } = useAuth();
+  const dispatch = useDispatch();
+
   const [subjects, setSubjects] = useState<string[]>(["english"]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutateAsync: fetchGroupOfSubjects } = useGetGroupOfQuestions();
@@ -35,6 +43,10 @@ export default function SetupForm() {
   };
 
   const startExam = async () => {
+    if (!subscribeCount || !subscribeCount.jamb) {
+      return setOpen(true);
+    }
+
     const loading = toast.loading("loading...");
     try {
       setIsSubmitting(true);
@@ -44,9 +56,16 @@ export default function SetupForm() {
       };
       const timeInSeconds = 60 * 60 * 2;
       const response = await fetchGroupOfSubjects(payload);
-      saveItem(localstore.questions, response);
+      // @ts-expect-error "fix later"
+      saveItem(localstore.questions, response.data);
+      // @ts-expect-error "fix later"
+      setCookie(userStore.subscribeCount, JSON.stringify(response.updatedUser));
       saveItem(localstore.time, timeInSeconds);
       saveItem(localstore.examStarted, true);
+
+      // @ts-expect-error "fix later"
+      dispatch(updateCount(response.updatedUser));
+
       toast.success("Starting...");
       window.location.href = "/exam";
     } catch (error: any) {
@@ -59,6 +78,7 @@ export default function SetupForm() {
 
   return (
     <div className="mx-auto my-4 grid h-fit min-h-[30rem] w-11/12 max-w-screen-lg overflow-hidden rounded-md bg-green-50/50 shadow md:grid-cols-2">
+      <RequireSubscription open={open} setOpen={setOpen} />
       <div>
         <img
           src="/assets/20301.jpg"

@@ -34,6 +34,12 @@ const authSlice = createSlice({
       state.username = action.payload.username;
       state.subscribeCount = action.payload.subscribeCount;
     },
+    updateCount: (
+      state,
+      action: PayloadAction<{ practice: number; jamb: number }>,
+    ) => {
+      state.subscribeCount = action.payload;
+    },
     logout: (state) => {
       state = initialState;
       return state;
@@ -41,5 +47,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, updateCount } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LoginResponse } from "@/__types__";
 import { userStore } from "@/data/constants";
 import { login, logout } from "@/hooks/features/authSlice";
@@ -22,9 +23,19 @@ export const authApi = createApi({
           const { data } = await queryFulfilled;
           setCookie(userStore.token, data.token);
           setCookie(userStore.username, data.username);
-          dispatch(login({ token: data.token, username: data.username }));
-        } catch (err) {
-          console.error("Login failed", err);
+          setCookie(
+            userStore.subscribeCount,
+            JSON.stringify(data.subscribeCount),
+          );
+          dispatch(
+            login({
+              token: data.token,
+              username: data.username,
+              subscribeCount: data.subscribeCount,
+            }),
+          );
+        } catch (err: any) {
+          throw new Error(err.data.message || "Something went wrong");
         }
       },
     }),

@@ -7,9 +7,17 @@ import { z } from "zod";
 // import { useAuthContext } from "../hooks/authContext";
 import InputLabel from "./input-label";
 import { useRegisterUserMutation } from "@/services/auth";
-import { Loader2 } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
 
 interface LoginProps {
   isLogin: boolean;
@@ -17,6 +25,7 @@ interface LoginProps {
 
 export default function SignupUser({ isLogin }: LoginProps) {
   const [registerUser] = useRegisterUserMutation();
+  const [open, setOpen] = useState(false);
 
   const loginSchema = z
     .object({
@@ -52,6 +61,7 @@ export default function SignupUser({ isLogin }: LoginProps) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<LoginSchemaType>({ resolver: zodResolver(loginSchema) });
 
   const signupUser: SubmitHandler<LoginSchemaType> = async (data) => {
@@ -61,8 +71,9 @@ export default function SignupUser({ isLogin }: LoginProps) {
         username: data.username,
         password: data.password,
       };
-      const response = await registerUser(payload).unwrap();
-      toast.success(response.message);
+      await registerUser(payload).unwrap();
+      reset();
+      setOpen(true);
     } catch (error: any) {
       toast.error(error.data.message);
     }
@@ -75,6 +86,15 @@ export default function SignupUser({ isLogin }: LoginProps) {
       } `}
       onSubmit={handleSubmit(signupUser)}
     >
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <CheckCircle className="text-green-500 max-sm:mx-auto" />
+            <DialogTitle>Success</DialogTitle>
+            <DialogDescription>Continue to login.</DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
       <h2 className="pb-2 text-2xl font-medium text-slate-700">Sign Up</h2>
       <InputLabel
         type="email"

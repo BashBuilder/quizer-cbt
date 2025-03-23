@@ -79,7 +79,8 @@ export default function LoginUser({ isLogin }: LoginProps) {
       toast.success("Login Successful");
       router.push("/");
     } catch (error: any) {
-      toast.error(error.data.message);
+      console.log("error", error);
+      toast.error(error.message);
     }
   };
 

@@ -9,4 +9,5 @@ export const localstore = {
 export const userStore = {
   token: "quizer-token",
   username: "quizer-username",
+  subscribeCount: "quizer-subscribe-count",
 };

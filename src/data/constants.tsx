@@ -4,6 +4,7 @@ export const localstore = {
   time: "quizer-time",
   examStarted: "quizer-exam-started",
   result: "quizer-result",
+  isJamb: "quizer-is-jamb",
 };
 
 export const userStore = {

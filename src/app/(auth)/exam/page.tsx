@@ -40,7 +40,7 @@ const Exam = () => {
   // }
 
   if (!questions) {
-    return <div>no Questions</div>;
+    return <div></div>;
   }
 
   const handleSelectSubject = (subject: string) => {

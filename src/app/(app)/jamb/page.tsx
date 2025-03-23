@@ -13,7 +13,7 @@ import {
 import { LoaderIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { subjects as availableSubjects } from "@/data/data";
-import { saveItem, setCookie } from "@/lib/auth";
+import { removeItems, saveItem, setCookie } from "@/lib/auth";
 import { localstore, userStore } from "@/data/constants";
 import { toast } from "sonner";
 import { useGetGroupOfQuestions } from "@/services/questions";
@@ -21,11 +21,13 @@ import useAuth from "@/hooks/useAuth";
 import RequireSubscription from "@/components/global/require-subscription";
 import { useDispatch } from "react-redux";
 import { updateCount } from "@/hooks/features/authSlice";
+import { useRouter } from "next/navigation";
 
 export default function SetupForm() {
   const [open, setOpen] = useState(false);
   const { subscribeCount } = useAuth();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [subjects, setSubjects] = useState<string[]>(["english"]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,10 +51,12 @@ export default function SetupForm() {
 
     const loading = toast.loading("loading...");
     try {
+      removeItems();
       setIsSubmitting(true);
       const payload = {
         subjects: subjects,
         number: 40,
+        jamb: true,
       };
       const timeInSeconds = 60 * 60 * 2;
       const response = await fetchGroupOfSubjects(payload);
@@ -62,12 +66,12 @@ export default function SetupForm() {
       setCookie(userStore.subscribeCount, JSON.stringify(response.updatedUser));
       saveItem(localstore.time, timeInSeconds);
       saveItem(localstore.examStarted, true);
-
+      saveItem(localstore.isJamb, true);
       // @ts-expect-error "fix later"
       dispatch(updateCount(response.updatedUser));
 
       toast.success("Starting...");
-      window.location.href = "/exam";
+      router.push("/exam");
     } catch (error: any) {
       toast.error(error);
     } finally {

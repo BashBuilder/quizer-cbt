@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import Multiselect from "@/components/multiselect";
 import Logo from "@/components/global/logo";
@@ -26,6 +26,7 @@ import { useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { updateCount } from "@/hooks/features/authSlice";
+import { useRouter } from "next/navigation";
 
 const SubjectSchema = z.object({
   subjects: z.array(z.string().min(1, "Subject is Required")),
@@ -39,7 +40,9 @@ export type QuizType = z.infer<typeof SubjectSchema>;
 export function CustomSubjectModal() {
   const [open, setOpen] = useState(false);
   const { subscribeCount } = useAuth();
+  const router = useRouter();
   const dispatch = useDispatch();
+
   const { mutateAsync: fetchGroupOfSubjects, isPending: isFetchingQuestions } =
     useGetGroupOfQuestions();
   const {
@@ -73,10 +76,11 @@ export function CustomSubjectModal() {
       setCookie(userStore.subscribeCount, JSON.stringify(response.updatedUser));
       saveItem(localstore.time, timeInSeconds);
       saveItem(localstore.examStarted, true);
+      saveItem(localstore.isJamb, false);
       // @ts-expect-error "fix later"
       dispatch(updateCount(response.updatedUser));
       toast.success("Starting...");
-      window.location.href = "/exam";
+      router.push("/exam");
     } catch (error: any) {
       toast.error(error);
     } finally {

@@ -21,6 +21,7 @@ import { removeItems, saveItem, setCookie } from "@/lib/auth";
 import { useGetRandomQuestions } from "@/services/questions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -41,6 +42,7 @@ export function SingleSubjectModal() {
   const { subscribeCount } = useAuth();
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const {
     mutateAsync: fetchRandomQuestion,
@@ -79,7 +81,7 @@ export function SingleSubjectModal() {
       // @ts-expect-error "fix later"
       dispatch(updateCount(response.updatedUser));
       toast.success("Starting...");
-      window.location.href = "/exam";
+      router.push("/exam");
     } catch (error: any) {
       toast.error(error);
     } finally {

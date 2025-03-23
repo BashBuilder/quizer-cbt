@@ -1,12 +1,13 @@
 "use client";
 import { loggedInLinks, navLinks } from "@/data/links";
-import useAuth from "@/hooks/useAuth";
+import { RootState } from "@/hooks/store";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { useSelector } from "react-redux";
 
 const NavLinks = () => {
-  const { token } = useAuth();
+  const { token } = useSelector((state: RootState) => state.auth);
   const pathname = usePathname();
 
   const links = token ? loggedInLinks : navLinks;

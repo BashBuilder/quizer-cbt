@@ -35,7 +35,8 @@ const useAuth = () => {
       }
     };
     fetchToken();
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { token, username, subscribeCount } = useSelector(
     (state: RootState) => state.auth,

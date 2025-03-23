@@ -46,6 +46,7 @@ const ExamHeader = () => {
     setIsSubmitting(true);
     const storedQuestions = getItem(localstore.questions);
     const storedOptions = getItem(localstore.testOptions);
+    const isJamb = Boolean(getItem(localstore.isJamb));
     removeItem(localstore.time);
     removeItem(localstore.examStarted);
     const loadingSpinner = toast.loading("Submitting...");
@@ -56,7 +57,7 @@ const ExamHeader = () => {
 
     if (storedQuestions && storedOptions) {
       submit(
-        { options: storedOptions, quiz: questions },
+        { options: storedOptions, quiz: questions, jamb: isJamb },
         {
           onSuccess: (data) => {
             saveItem(localstore.result, data);

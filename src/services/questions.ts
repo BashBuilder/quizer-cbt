@@ -26,7 +26,11 @@ export const useGetRandomQuestions = () => {
 
 export const useGetGroupOfQuestions = () => {
   return useMutation({
-    mutationFn: async (data: { subjects: string[]; number: number }) => {
+    mutationFn: async (data: {
+      subjects: string[];
+      number: number;
+      jamb?: boolean;
+    }) => {
       try {
         const response = await axios.post<
           {
@@ -55,6 +59,7 @@ export const useSubmitQuestions = () => {
         subject: string;
         data: QuestionType[];
       }[];
+      jamb: boolean;
     }) => {
       try {
         const response = await axios.post("/question/submit", data);

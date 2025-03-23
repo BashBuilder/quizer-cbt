@@ -79,6 +79,7 @@ export function CustomSubjectModal() {
       saveItem(localstore.isJamb, false);
       // @ts-expect-error "fix later"
       dispatch(updateCount(response.updatedUser));
+
       toast.success("Starting...");
       router.push("/exam");
     } catch (error: any) {

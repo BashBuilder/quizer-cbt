@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { localstore, userStore } from "@/data/constants";
 import { subjects } from "@/data/data";
-import { removeItems, saveItem } from "@/lib/auth";
+import { removeItems, saveItem, setCookie } from "@/lib/auth";
 import { useGetGroupOfQuestions } from "@/services/questions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";

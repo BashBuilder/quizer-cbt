@@ -2,6 +2,8 @@
 import React from "react";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { Button } from "../ui/button";
+import { useSubscrib } from "@/services/subscription";
+import { Loader2 } from "lucide-react";
 
 interface SubscriptionPropsTypes {
   open: boolean;
@@ -9,6 +11,17 @@ interface SubscriptionPropsTypes {
 }
 
 const RequireSubscription = ({ open, setOpen }: SubscriptionPropsTypes) => {
+  const { mutateAsync: subscribe, isPending } = useSubscrib();
+
+  const handleSubscribe: () => void = async () => {
+    try {
+      const response = await subscribe();
+      window.location.href = response.checkout_url;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="z-[100000000000] space-y-4">
@@ -18,7 +31,13 @@ const RequireSubscription = ({ open, setOpen }: SubscriptionPropsTypes) => {
           <br />
         </p>
         <h2 className="text-lg font-semibold">Price : ₦500</h2>
-        <Button className="w-full">Subscribe</Button>
+        <Button
+          className="w-full"
+          onClick={handleSubscribe}
+          disabled={isPending}
+        >
+          {isPending ? <Loader2 className="animate-spin" /> : "Subscribe"}
+        </Button>
       </DialogContent>
     </Dialog>
   );

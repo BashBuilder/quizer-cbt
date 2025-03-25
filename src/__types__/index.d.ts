@@ -43,3 +43,8 @@ interface LoginResponse {
     jamb: number;
   };
 }
+
+interface ScoreModel {
+  email: string;
+  score: { subject: string; score: number }[];
+}

@@ -1,7 +1,25 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "@/config/axios";
-import { QuestionType, SelectedOptionType } from "@/__types__";
+import { QuestionType, ScoreModel, SelectedOptionType } from "@/__types__";
 import { AxiosError } from "axios";
+
+export const useGetScores = () => {
+  return useQuery({
+    queryKey: ["scores"],
+    queryFn: async () => {
+      try {
+        const response = await axios.get<ScoreModel[]>("/question/scores");
+        return response.data;
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          throw error.response?.data.message || "Something went wrong";
+        } else {
+          throw "Something went wrong";
+        }
+      }
+    },
+  });
+};
 
 export const useGetRandomQuestions = () => {
   return useMutation({

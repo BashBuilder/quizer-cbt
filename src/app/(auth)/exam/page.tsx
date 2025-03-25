@@ -3,7 +3,7 @@ import { QuestionApiResponseType } from "@/__types__";
 import ExamHeader from "@/components/exam/exam-header";
 // import Loading from "@/components/global/loading";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ExamModal from "./exam-modal";
 import { getItem } from "@/lib/auth";
 import { localstore } from "@/data/constants";
@@ -16,6 +16,10 @@ const Exam = () => {
   const [questions, setQuestions] = useState<
     undefined | QuestionApiResponseType[]
   >();
+
+  const header = useMemo(() => {
+    return <ExamHeader />;
+  }, []);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -30,14 +34,6 @@ const Exam = () => {
 
     fetchQuestions();
   }, []);
-
-  // if (loading) {
-  //   return (
-  //     <div className="flex h-[60vh] items-center justify-center">
-  //       <Loading />
-  //     </div>
-  //   );
-  // }
 
   if (!questions) {
     return <div></div>;
@@ -57,8 +53,7 @@ const Exam = () => {
 
   return (
     <main className="container mx-auto">
-      <ExamHeader />
-
+      {header}
       <div className="px-4 pt-10 md:px-8">
         <section className="mx-auto flex max-w-screen-lg flex-col gap-4 pt-12">
           {/* buutons */}

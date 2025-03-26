@@ -1,9 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import { Zap } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
+import Link from "next/link";
+
+import { useSelector } from "react-redux";
+import { RootState } from "@/hooks/store";
 
 const Landing = () => {
+  const { token } = useSelector((state: RootState) => state.auth);
+
   return (
     <section className="container mx-auto grid gap-4 px-8 py-16 lg:grid-cols-4">
       <img
@@ -30,10 +37,26 @@ const Landing = () => {
         </article>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Button size="sm"> Explore Subjects </Button>
-          <Button variant="outline" size="sm">
-            Get Started
-          </Button>
+          <Link href="/quiz">
+            <Button size="sm"> Explore Subjects </Button>
+          </Link>
+          {token ? (
+            <Link href="/jamb">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-emerald-500 text-white"
+              >
+                Take Jamb
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/auth">
+              <Button variant="outline" size="sm">
+                Get Started
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
       <img

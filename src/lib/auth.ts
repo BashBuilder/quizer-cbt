@@ -11,7 +11,8 @@ const cookie = new Cookies();
 export const setToken = (key: string, token: string) => {
   const currentDate = new Date();
   const expirationDate = new Date(currentDate);
-  expirationDate.setMinutes(currentDate.getHours() + 10);
+  expirationDate.setHours(currentDate.getHours() + 10);
+
   cookie.set(key, encrypt(JSON.stringify(token)), {
     httpOnly: false,
     secure: true,
@@ -29,14 +30,6 @@ export const getToken = (key: string) => {
 export const removeToken = (key: string) => {
   cookie.remove(key);
 };
-
-// // export const removeTokens = () => {
-// //   removeToken("entityUserToken");
-// //   removeToken("token");
-// //   removeToken("entityId");
-// //   removeToken("hasWallet");
-// //   removeToken("isTeamMember");
-// // };
 
 export const setCookie = (key: string, value: string) => {
   cookie.set(key, value, {

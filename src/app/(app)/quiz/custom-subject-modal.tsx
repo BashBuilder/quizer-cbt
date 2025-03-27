@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { localstore, userStore } from "@/data/constants";
 import { subjects } from "@/data/data";
 import { removeItems, saveItem, setCookie } from "@/lib/auth";
-import { useGetGroupOfQuestions } from "@/services/questions";
+// import { useGetGroupOfQuestions } from "@/services/questions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -27,6 +27,7 @@ import useAuth from "@/hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { updateCount } from "@/hooks/features/authSlice";
 import { useRouter } from "next/navigation";
+import { getQuestions } from "@/services/api";
 
 const SubjectSchema = z.object({
   subjects: z.array(z.string().min(1, "Subject is Required")),
@@ -43,8 +44,8 @@ export function CustomSubjectModal() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { mutateAsync: fetchGroupOfSubjects, isPending: isFetchingQuestions } =
-    useGetGroupOfQuestions();
+  // const { mutateAsync: fetchGroupOfSubjects, isPending: isFetchingQuestions } =
+  //   useGetGroupOfQuestions();
   const {
     register,
     handleSubmit,
@@ -69,15 +70,13 @@ export function CustomSubjectModal() {
         number: data.number,
       };
       const timeInSeconds = data.time * 60;
-      const response = await fetchGroupOfSubjects(payload);
-      // @ts-expect-error "fix later"
+      // const response = await fetchGroupOfSubjects(payload);
+      const response = await getQuestions(payload);
       saveItem(localstore.questions, response.data);
-      // @ts-expect-error "fix later"
       setCookie(userStore.subscribeCount, JSON.stringify(response.updatedUser));
       saveItem(localstore.time, timeInSeconds);
       saveItem(localstore.examStarted, true);
       saveItem(localstore.isJamb, false);
-      // @ts-expect-error "fix later"
       dispatch(updateCount(response.updatedUser));
 
       toast.success("Starting...");
@@ -161,13 +160,9 @@ export function CustomSubjectModal() {
           <Button
             type="submit"
             className="mx-auto w-fit"
-            disabled={isSubmitting || isFetchingQuestions}
+            disabled={isSubmitting}
           >
-            {isSubmitting || isFetchingQuestions ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              "Start"
-            )}
+            {isSubmitting ? <Loader2 className="animate-spin" /> : "Start"}
           </Button>
         </form>
       </DialogContent>

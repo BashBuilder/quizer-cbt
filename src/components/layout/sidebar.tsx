@@ -9,21 +9,21 @@ import {
 } from "@/components/ui/sheet";
 import { AlignRight, User } from "lucide-react";
 import Logo from "../global/logo";
-import { navLinks } from "@/data/links";
+import { loggedInLinks, navLinks } from "@/data/links";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
 import { useLogoutUserMutation } from "@/services/auth";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "@/hooks/store";
 
-interface SidebarProps {
-  username: string | undefined;
-  token: string | undefined;
-}
-
-export function Sidebar({ username, token }: SidebarProps) {
+export function Sidebar() {
+  const { token, username } = useSelector((state: RootState) => state.auth);
   const pathname = usePathname();
+
+  const links = token ? loggedInLinks : navLinks;
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const [logout] = useLogoutUserMutation();
@@ -46,7 +46,7 @@ export function Sidebar({ username, token }: SidebarProps) {
           <Logo />
         </SheetHeader>
         <div className="flex w-full flex-col items-center justify-center gap-6">
-          {navLinks.map((link, index) => (
+          {links.map((link, index) => (
             <a
               key={index}
               href={link.href}

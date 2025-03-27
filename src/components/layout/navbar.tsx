@@ -44,7 +44,7 @@ const Navbar = () => {
         </div>
 
         <div className="md:hidden">
-          <Sidebar token={token} username={username} />
+          <Sidebar />
         </div>
       </nav>
     </header>

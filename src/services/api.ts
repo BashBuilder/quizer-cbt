@@ -1,34 +1,27 @@
-import { QuestionType } from "@/__types__";
+import { LoginResponse, QuestionType } from "@/__types__";
 import { userStore } from "@/data/constants";
-// import { subjects } from "@/data/data";
 import { getCookie } from "@/lib/auth";
 import axios from "axios";
-
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_ALOC_BASE_URL;
-
-axios.interceptors.request.use((config) => {
-  const token = process.env.NEXT_PUBLIC_ALOC_TOKEN;
-
-  if (token) {
-    config.headers.AccessToken = token;
-  }
-  config.headers.Accept = "application/json";
-
-  return config;
-});
 
 export const getRandomQuestionsBySubject = async (
   subject: string,
   number: number,
 ) => {
   try {
-    const url = `q/${number}?subject=${subject}`;
+    const url =
+      process.env.NEXT_PUBLIC_ALOC_BASE_URL + `q/${number}?subject=${subject}`;
 
     const response = await axios.get<{
       subject: string;
       status: number;
       data: QuestionType[];
-    }>(url);
+    }>(url, {
+      headers: {
+        "Content-Type": "application/json",
+        AccessToken: process.env.NEXT_PUBLIC_ALOC_TOKEN,
+        Accept: "application/json",
+      },
+    });
 
     return response.data;
   } catch (error) {
@@ -42,16 +35,18 @@ export const getRandomQuestionsBySubject = async (
     );
   }
 };
-export const getJamb = async (data: { subjects: string[]; jamb?: boolean }) => {
+export const getQuestions = async (data: {
+  subjects: string[];
+  jamb?: boolean;
+  number: number;
+}) => {
   try {
-    const { subjects, jamb } = data;
+    const { subjects, jamb, number } = data;
     const questions: {
       subject: string;
       status: number;
       data: QuestionType[];
     }[] = [];
-
-    let updatedUser = {};
 
     for (const subject of subjects) {
       if (subject === "english") {
@@ -63,7 +58,7 @@ export const getJamb = async (data: { subjects: string[]; jamb?: boolean }) => {
           process.env.NEXT_PUBLIC_API_BASE_URL + "question/random",
           {
             subject: "english",
-            number: 40,
+            number,
             jamb,
           },
           {
@@ -74,18 +69,28 @@ export const getJamb = async (data: { subjects: string[]; jamb?: boolean }) => {
           },
         );
         questions.push(data);
-        // @ts-expect-error "type"
-        updatedUser = data.updatedUser;
       } else {
-        await getRandomQuestionsBySubject(subject, 40).then((data) =>
+        await getRandomQuestionsBySubject(subject, number).then((data) =>
           questions.push(data),
         );
       }
     }
 
-    console.log("updated user", updatedUser);
-
-    return { data: questions, updatedUser };
+    const response = await axios.post<LoginResponse>(
+      process.env.NEXT_PUBLIC_API_BASE_URL + "user/me",
+      {
+        subject: "english",
+        number,
+        jamb,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie(userStore.token)}`,
+        },
+      },
+    );
+    return { data: questions, updatedUser: response.data.subscribeCount };
   } catch (error) {
     if (error) {
       throw error;

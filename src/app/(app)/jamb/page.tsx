@@ -22,7 +22,7 @@ import RequireSubscription from "@/components/global/require-subscription";
 import { useDispatch } from "react-redux";
 import { updateCount } from "@/hooks/features/authSlice";
 import { useRouter } from "next/navigation";
-import { getJamb } from "@/services/api";
+import { getQuestions } from "@/services/api";
 
 export default function SetupForm() {
   const [open, setOpen] = useState(false);
@@ -56,18 +56,17 @@ export default function SetupForm() {
       setIsSubmitting(true);
       const payload = {
         subjects: subjects,
-        // number: 40,
+        number: 40,
         jamb: true,
       };
       const timeInSeconds = 60 * 60 * 2;
       // const response = await fetchGroupOfSubjects(payload);
-      const response = await getJamb(payload);
+      const response = await getQuestions(payload);
       saveItem(localstore.questions, response.data);
       setCookie(userStore.subscribeCount, JSON.stringify(response.updatedUser));
       saveItem(localstore.time, timeInSeconds);
       saveItem(localstore.examStarted, true);
       saveItem(localstore.isJamb, true);
-      // @ts-expect-error "fix later"
       dispatch(updateCount(response.updatedUser));
 
       toast.success("Starting...");

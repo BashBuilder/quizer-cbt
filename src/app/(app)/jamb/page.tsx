@@ -16,12 +16,13 @@ import { subjects as availableSubjects } from "@/data/data";
 import { removeItems, saveItem, setCookie } from "@/lib/auth";
 import { localstore, userStore } from "@/data/constants";
 import { toast } from "sonner";
-import { useGetGroupOfQuestions } from "@/services/questions";
+// import { useGetGroupOfQuestions } from "@/services/questions";
 import useAuth from "@/hooks/useAuth";
 import RequireSubscription from "@/components/global/require-subscription";
 import { useDispatch } from "react-redux";
 import { updateCount } from "@/hooks/features/authSlice";
 import { useRouter } from "next/navigation";
+import { getJamb } from "@/services/api";
 
 export default function SetupForm() {
   const [open, setOpen] = useState(false);
@@ -31,7 +32,7 @@ export default function SetupForm() {
 
   const [subjects, setSubjects] = useState<string[]>(["english"]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mutateAsync: fetchGroupOfSubjects } = useGetGroupOfQuestions();
+  // const { mutateAsync: fetchGroupOfSubjects } = useGetGroupOfQuestions();
 
   // adjust the selected subjects
   const adjustSubject = (subject: string) => {
@@ -55,14 +56,13 @@ export default function SetupForm() {
       setIsSubmitting(true);
       const payload = {
         subjects: subjects,
-        number: 40,
+        // number: 40,
         jamb: true,
       };
       const timeInSeconds = 60 * 60 * 2;
-      const response = await fetchGroupOfSubjects(payload);
-      // @ts-expect-error "fix later"
+      // const response = await fetchGroupOfSubjects(payload);
+      const response = await getJamb(payload);
       saveItem(localstore.questions, response.data);
-      // @ts-expect-error "fix later"
       setCookie(userStore.subscribeCount, JSON.stringify(response.updatedUser));
       saveItem(localstore.time, timeInSeconds);
       saveItem(localstore.examStarted, true);
@@ -147,7 +147,7 @@ export default function SetupForm() {
         <Button
           className="bg-green-600 hover:bg-green-500"
           type="submit"
-          disabled={subjects.length !== 4}
+          disabled={subjects.length !== 4 || isSubmitting}
           onClick={startExam}
         >
           {isSubmitting ? (

@@ -148,7 +148,7 @@ export const getQuestions = async (data: {
           data: [...part1.data, ...part2.data],
         };
         questions.push(q);
-      } else if (subject === "literature") {
+      } else if (subject === "englishlit") {
         const lit = await getLiteratureQuestionFromDb(number);
         questions.push(lit);
       } else {

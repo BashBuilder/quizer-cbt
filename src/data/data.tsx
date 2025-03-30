@@ -6,7 +6,7 @@ export const subjects = [
   { value: "biology", label: "Biology" },
   { value: "physics", label: "Physics" },
   { value: "chemistry", label: "Chemistry" },
-  // { value: "englishlit", label: "English Literature" },
+  { value: "englishlit", label: "English Literature" },
   { value: "government", label: "Government" },
   { value: "crk", label: "Christian Religious Knowledge" },
   { value: "geography", label: "Geography" },

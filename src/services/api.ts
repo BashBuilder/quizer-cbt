@@ -35,6 +35,7 @@ export const getRandomQuestionsBySubject = async (
     );
   }
 };
+
 export const getOrderedQuestionsBySubject = async (
   subject: string,
   number: number,
@@ -73,6 +74,25 @@ export const getEnglishQuestionFromDb = async () => {
   try {
     const { data } = await axios.get(
       process.env.NEXT_PUBLIC_API_BASE_URL + "question/english",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie(userStore.token)}`,
+        },
+      },
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to fetch english questions");
+  }
+};
+
+export const getLiteratureQuestionFromDb = async (number: number) => {
+  try {
+    const { data } = await axios.get(
+      process.env.NEXT_PUBLIC_API_BASE_URL +
+        `question/literature?number=${number}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -128,13 +148,15 @@ export const getQuestions = async (data: {
           data: [...part1.data, ...part2.data],
         };
         questions.push(q);
+      } else if (subject === "literature") {
+        const lit = await getLiteratureQuestionFromDb(number);
+        questions.push(lit);
       } else {
         await getRandomQuestionsBySubject(subject, number).then((data) =>
           questions.push(data),
         );
       }
     }
-
     const response = await axios.post<LoginResponse>(
       process.env.NEXT_PUBLIC_API_BASE_URL + "user/me",
       {

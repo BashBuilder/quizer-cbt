@@ -7,9 +7,13 @@ import { Sidebar } from "./sidebar";
 import NavLinks from "./nav-links";
 import { Logout } from "./logout";
 import useAuth from "@/hooks/useAuth";
+// import { useMeQuery } from "@/services/auth";
 
 const Navbar = () => {
+  // const { data } = useMeQuery();
   const { token, username } = useAuth();
+
+  // console.log(data);
 
   return (
     <header className="shadow">

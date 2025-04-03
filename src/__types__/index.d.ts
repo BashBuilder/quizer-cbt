@@ -48,3 +48,17 @@ interface ScoreModel {
   email: string;
   score: { subject: string; score: number }[];
 }
+
+export type UserDocument = {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  subscribeCount: {
+    practice: number;
+    jamb: number;
+  };
+};

@@ -7,9 +7,16 @@ export const useSubscrib = () => {
   return useMutation({
     mutationFn: async () => {
       try {
-        const response = await axios.post("/user/subscribe", {
-          data: "some data",
-        });
+        const response = await axios.post(
+          process.env.NEXT_PUBLIC_API_BASE_URL + "user/subscribe",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getCookie(userStore.token)}`,
+            },
+          },
+        );
         return response.data;
       } catch (error) {
         throw error;

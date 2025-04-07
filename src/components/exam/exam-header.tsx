@@ -8,14 +8,14 @@ import { localstore } from "@/data/constants";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ExamCalculator from "./ExamCalculator";
-import { Calculator } from "lucide-react";
+import { Calculator, Loader2 } from "lucide-react";
 import { useSubmitQuestions } from "@/services/questions";
 
 const ExamHeader = () => {
   const [warningCount, setWarningCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCalculatorShown, setIsCalculatorShown] = useState(false);
-  const { mutate: submit } = useSubmitQuestions();
+  const { mutate: submit, isPending } = useSubmitQuestions();
 
   const router = useRouter();
 
@@ -161,8 +161,17 @@ const ExamHeader = () => {
           startCountdown={true}
         />
       </div>
-      <Button variant="outline" size="sm" onClick={handleExamFinish}>
-        Submit
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleExamFinish}
+        disabled={isPending || isSubmitting}
+      >
+        {isPending || isSubmitting ? (
+          <Loader2 className="animate-spin" />
+        ) : (
+          "Submit"
+        )}
       </Button>
     </header>
   );

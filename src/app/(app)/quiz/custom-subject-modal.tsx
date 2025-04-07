@@ -58,7 +58,7 @@ export function CustomSubjectModal() {
   };
 
   const onSubmit: SubmitHandler<QuizType> = async (data) => {
-    if (!subscribeCount || !subscribeCount.practice) {
+    if (!subscribeCount || subscribeCount.practice <= 0) {
       return setOpen(true);
     }
 

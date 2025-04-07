@@ -46,7 +46,7 @@ export default function SetupForm() {
   };
 
   const startExam = async () => {
-    if (!subscribeCount || !subscribeCount.jamb) {
+    if (!subscribeCount || subscribeCount.jamb <= 0) {
       return setOpen(true);
     }
 

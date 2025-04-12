@@ -42,6 +42,8 @@ const ExamHeader = () => {
     setWarningCount((prev) => Math.min(prev + 1, 3));
   };
 
+  // added some random comments here
+
   const handleExamFinish = () => {
     setIsSubmitting(true);
     const storedQuestions = getItem(localstore.questions);

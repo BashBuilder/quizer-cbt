@@ -72,7 +72,8 @@ export default function SetupForm() {
       toast.success("Starting...");
       router.push("/exam");
     } catch (error: any) {
-      toast.error(error);
+      console.log(error);
+      toast.error("Check your network and try again");
     } finally {
       toast.dismiss(loading);
       setIsSubmitting(false);

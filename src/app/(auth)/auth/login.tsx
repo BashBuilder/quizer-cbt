@@ -60,7 +60,6 @@ export default function LoginUser({ isLogin }: LoginProps) {
   //     setIsPasswordForgotten(false);
   //   } catch (error) {
   //     const message = (error as Error).message;
-  //     console.log(message);
   //     // if (message.includes("network")) {
   //     //   setForgottenEmail((prev) => ({ ...prev, error: "Check your network" }));
   //     // } else if (message.includes("invalid")) {
@@ -79,7 +78,6 @@ export default function LoginUser({ isLogin }: LoginProps) {
       toast.success("Login Successful");
       router.push("/");
     } catch (error: any) {
-      console.log("error", error);
       toast.error(error.message);
     }
   };

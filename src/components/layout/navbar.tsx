@@ -13,8 +13,6 @@ const Navbar = () => {
   // const { data } = useMeQuery();
   const { token, username } = useAuth();
 
-  // console.log(data);
-
   return (
     <header className="shadow">
       <div className="flex items-center justify-center bg-primary px-6 py-2 text-white">

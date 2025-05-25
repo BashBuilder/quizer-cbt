@@ -17,9 +17,7 @@ const RequireSubscription = ({ open, setOpen }: SubscriptionPropsTypes) => {
     try {
       const response = await subscribe();
       window.location.href = response.checkout_url;
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

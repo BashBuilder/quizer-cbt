@@ -82,7 +82,6 @@ export function CustomSubjectModal() {
       toast.success("Starting...");
       router.push("/exam");
     } catch (error: any) {
-      console.log(error);
       toast.error("Check your network, and try again");
     } finally {
       toast.dismiss(loading);

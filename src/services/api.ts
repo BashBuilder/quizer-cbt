@@ -83,7 +83,6 @@ export const getEnglishQuestionFromDb = async () => {
     );
     return data;
   } catch (error) {
-    console.log(error);
     throw new Error("failed to fetch english questions");
   }
 };
@@ -102,7 +101,6 @@ export const getLiteratureQuestionFromDb = async (number: number) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
     throw new Error("failed to fetch english questions");
   }
 };

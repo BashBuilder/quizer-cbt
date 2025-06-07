@@ -33,7 +33,6 @@ export default function SetupForm() {
   const [subjects, setSubjects] = useState<string[]>(["english"]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   // const { mutateAsync: fetchGroupOfSubjects } = useGetGroupOfQuestions();
-  // const { mutateAsync: fetchGroupOfSubjects } = useGetGroupOfQuestions();
 
   // adjust the selected subjects
   const adjustSubject = (subject: string) => {

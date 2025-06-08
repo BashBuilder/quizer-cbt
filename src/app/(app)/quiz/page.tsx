@@ -4,6 +4,9 @@ import React from "react";
 import { CustomSubjectModal } from "./custom-subject-modal";
 import { SingleSubjectModal } from "./single-subject-modal copy";
 
+// added some comments to explain the code
+// This is the main page component for the quiz section of the application.
+
 const page = () => {
   return (
     <main className="container grid items-center gap-6 px-8 lg:grid-cols-2">

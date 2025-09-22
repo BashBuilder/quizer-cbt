@@ -21,7 +21,6 @@ export const metadata: Metadata = {
     "online exam prep",
     "WAEC questions and answers",
     "JAMB CBT practice",
-    "general knowledge quiz",
     "educational platform",
     "student learning",
     "exam preparation",

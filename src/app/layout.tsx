@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   keywords: [
     "JAMB past questions",
     "WAEC practice",
-    "free quizzes",
     "online exam prep",
     "WAEC questions and answers",
     "JAMB CBT practice",

@@ -4,6 +4,9 @@ import "./globals.css";
 import QueryProvider from "@/Provider/query-provider";
 import { Toaster } from "sonner";
 import { ReduxProvider } from "@/Provider/redux-provider";
+import { Analytics } from "@vercel/analytics/next";
+import { Chatbot } from "@/components/chatbot";
+import { NotificationSystem } from "@/components/notification-system";
 
 const monasans = Mona_Sans({
   variable: "--font-worksans",
@@ -60,6 +63,9 @@ export default function RootLayout({
         className={`${monasans.className} mx-auto max-w-screen-2xl antialiased`}
       >
         <ReduxProvider>
+          <Analytics />
+          <Chatbot />
+          <NotificationSystem />
           <Toaster richColors position="top-right" />
           <QueryProvider>{children}</QueryProvider>
         </ReduxProvider>

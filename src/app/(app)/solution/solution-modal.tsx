@@ -5,7 +5,7 @@ import {
   QuestionType,
   SelectedOptionType,
 } from "@/__types__";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import { localstore } from "@/data/constants";
 import { getItem } from "@/lib/auth";
 import { cn } from "@/lib/utils";

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Loading from "@/components/global/loading";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import { localstore } from "@/data/constants";
 import { getItem } from "@/lib/auth";
 import Link from "next/link";

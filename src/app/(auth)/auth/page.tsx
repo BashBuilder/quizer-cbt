@@ -3,7 +3,7 @@
 import { useState } from "react";
 import LoginUser from "./login";
 import SignupUser from "./signup";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/global/logo";
 

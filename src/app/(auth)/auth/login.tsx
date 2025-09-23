@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import InputLabel from "./input-label";
 import { useLoginUserMutation } from "@/services/auth";
 import { toast } from "sonner";

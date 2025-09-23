@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Dialog, DialogContent } from "../ui/dialog";
-import { Button } from "../ui/button";
+import { Dialog, DialogContent } from "../uis/dialog";
+import { Button } from "../uis/button";
 import { useSubscrib } from "@/services/subscription";
 import { Loader2 } from "lucide-react";
 

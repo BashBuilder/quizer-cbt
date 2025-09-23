@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@/components/uis/sheet";
 import { AlignRight, User } from "lucide-react";
 import Logo from "../global/logo";
 import { loggedInLinks, navLinks } from "@/data/links";

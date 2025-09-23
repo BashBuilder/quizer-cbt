@@ -1,5 +1,5 @@
 "use client";
-import MultipleSelector from "@/components/ui/multiselect";
+import MultipleSelector from "@/components/uis/multiselect";
 
 interface SelectPropTypes {
   data: {

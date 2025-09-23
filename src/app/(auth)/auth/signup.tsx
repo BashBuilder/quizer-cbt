@@ -9,14 +9,14 @@ import InputLabel from "./input-label";
 import { useRegisterUserMutation } from "@/services/auth";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/components/uis/dialog";
 import { useState } from "react";
 
 interface LoginProps {

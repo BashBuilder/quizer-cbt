@@ -2,7 +2,7 @@
 "use client";
 import { Zap } from "lucide-react";
 import React from "react";
-import { Button } from "../ui/button";
+import { Button } from "../uis/button";
 import Link from "next/link";
 
 import { useSelector } from "react-redux";

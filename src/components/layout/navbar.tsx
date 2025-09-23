@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Logo from "../global/logo";
-import { Button } from "../ui/button";
+import { Button } from "../uis/button";
 import Link from "next/link";
 import { Sidebar } from "./sidebar";
 import NavLinks from "./nav-links";

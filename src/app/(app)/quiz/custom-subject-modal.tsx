@@ -3,15 +3,15 @@
 
 import Multiselect from "@/components/multiselect";
 import Logo from "@/components/global/logo";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "@/components/uis/dialog";
+import { Input } from "@/components/uis/input";
 import { localstore, userStore } from "@/data/constants";
 import { subjects } from "@/data/data";
 import { removeItems, saveItem, setCookie } from "@/lib/auth";

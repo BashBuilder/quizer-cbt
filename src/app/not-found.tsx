@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import Link from "next/link";
 import React from "react";
 

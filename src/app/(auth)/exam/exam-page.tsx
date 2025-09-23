@@ -1,7 +1,7 @@
 "use client";
 import { QuestionApiResponseType } from "@/__types__";
 // import Loading from "@/components/global/loading";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import React, { useEffect, useState } from "react";
 import ExamModal from "./exam-modal";
 import { getItem } from "@/lib/auth";

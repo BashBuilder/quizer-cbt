@@ -9,9 +9,9 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/uis/dropdown-menu";
 import { LoaderIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/uis/button";
 import { subjects as availableSubjects } from "@/data/data";
 import { removeItems, saveItem, setCookie } from "@/lib/auth";
 import { localstore, userStore } from "@/data/constants";

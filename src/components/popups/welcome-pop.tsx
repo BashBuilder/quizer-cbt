@@ -8,8 +8,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Button } from "../ui/button";
+} from "@/components/uis/drawer";
+import { Button } from "../uis/button";
 
 const WelcomePopUp = () => {
   return (

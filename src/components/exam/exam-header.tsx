@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Logo from "../global/logo";
 import CounterDownTimer from "./countdown-timer";
-import { Button } from "../ui/button";
+import { Button } from "../uis/button";
 import { getItem, removeItem, saveItem } from "@/lib/auth";
 import { localstore } from "@/data/constants";
 import { toast } from "sonner";

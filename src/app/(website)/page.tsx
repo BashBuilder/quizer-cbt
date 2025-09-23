@@ -1,7 +1,6 @@
 "use client";
 
 // import WelcomePopUp from "@/components/popups/welcome-pop";
-import { Chatbot } from "@/components/chatbot";
 import About from "@/components/home/about";
 import Landing from "@/components/home/landing";
 import Subjects from "@/components/home/subjects";
@@ -13,7 +12,6 @@ export default function Home() {
       <Landing />
       <Subjects />
       <About />
-      <Chatbot />
     </main>
   );
 }

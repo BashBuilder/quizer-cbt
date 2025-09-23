@@ -64,7 +64,7 @@ export default function RootLayout({
       >
         <ReduxProvider>
           <Analytics />
-          {/* <Chatbot /> */}
+          <Chatbot />
           <NotificationSystem />
           <Toaster richColors position="top-right" />
           <QueryProvider>{children}</QueryProvider>

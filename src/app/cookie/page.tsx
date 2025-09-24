@@ -284,6 +284,7 @@ export default function CookiePolicyPage() {
             </CardContent>
           </Card>
 
+          {/* added some other comments */}
           {/* Managing Cookies */}
           <Card>
             <CardHeader>

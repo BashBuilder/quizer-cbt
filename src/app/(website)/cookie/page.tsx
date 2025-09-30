@@ -396,25 +396,30 @@ export default function CookiePolicyPage() {
                   <strong>Response Time:</strong> Within 48 hours
                 </p>
               </div>
+
+              <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
+                <p>
+                  This cookie policy is effective as of December 2024 and may be
+                  updated to reflect changes in our practices.
+                </p>
+                <p className="mt-2">
+                  <Link
+                    href="/privacy"
+                    className="text-primary hover:underline"
+                  >
+                    Privacy Policy
+                  </Link>{" "}
+                  |
+                  <Link
+                    href="/terms"
+                    className="ml-2 text-primary hover:underline"
+                  >
+                    Terms of Service
+                  </Link>
+                </p>
+              </div>
             </CardContent>
           </Card>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>
-            This cookie policy is effective as of December 2024 and may be
-            updated to reflect changes in our practices.
-          </p>
-          <p className="mt-2">
-            <Link href="/privacy" className="text-primary hover:underline">
-              Privacy Policy
-            </Link>{" "}
-            |
-            <Link href="/terms" className="ml-2 text-primary hover:underline">
-              Terms of Service
-            </Link>
-          </p>
         </div>
       </div>
     </div>

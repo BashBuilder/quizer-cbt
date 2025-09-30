@@ -1,16 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowLeft,
-  Shield,
-  Eye,
-  Lock,
-  Users,
-  Database,
-  Globe,
-  Mail,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Shield, Eye, Lock, Users, Database, Globe, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
@@ -26,12 +16,6 @@ export default function PrivacyPolicyPage() {
       <div className="container mx-auto max-w-4xl px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/">
-            <Button variant="ghost" className="mb-4">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
-            </Button>
-          </Link>
           <div className="mb-4 flex items-center gap-3">
             <div className="rounded-xl bg-primary/10 p-3">
               <Shield className="h-8 w-8 text-primary" />
@@ -317,25 +301,29 @@ export default function PrivacyPolicyPage() {
                   days
                 </p>
               </div>
+              <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
+                <p>
+                  This privacy policy is effective as of December 2024 and may
+                  be updated periodically.
+                </p>
+                <p className="mt-2">
+                  <Link
+                    href="/cookies"
+                    className="text-primary hover:underline"
+                  >
+                    Cookie Policy
+                  </Link>{" "}
+                  |
+                  <Link
+                    href="/terms"
+                    className="ml-2 text-primary hover:underline"
+                  >
+                    Terms of Service
+                  </Link>
+                </p>
+              </div>
             </CardContent>
           </Card>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>
-            This privacy policy is effective as of December 2024 and may be
-            updated periodically.
-          </p>
-          <p className="mt-2">
-            <Link href="/cookies" className="text-primary hover:underline">
-              Cookie Policy
-            </Link>{" "}
-            |
-            <Link href="/terms" className="ml-2 text-primary hover:underline">
-              Terms of Service
-            </Link>
-          </p>
         </div>
       </div>
     </div>

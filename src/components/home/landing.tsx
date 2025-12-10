@@ -10,11 +10,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Chatbot } from "@/components/chatbot";
-import { NotificationSystem } from "@/components/notification-system";
 import {
   ArrowRight,
-  BookOpen,
+  // BookOpen,
   Brain,
   Trophy,
   Users,
@@ -384,7 +382,7 @@ export default function HomePage() {
                     </div>
                   </div>
                   <p className="mb-4 leading-relaxed text-muted-foreground">
-                    "{testimonial.quote}"
+                    {testimonial.quote}
                   </p>
                   <div className="flex items-center space-x-1">
                     {[...Array(5)].map((_, i) => (

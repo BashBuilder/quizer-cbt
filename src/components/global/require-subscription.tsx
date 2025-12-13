@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable  */
 import React from "react";
 import { Dialog, DialogContent } from "../uis/dialog";
 import { Button } from "../uis/button";

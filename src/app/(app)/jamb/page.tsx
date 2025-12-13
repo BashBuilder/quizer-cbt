@@ -72,6 +72,7 @@ export default function SetupForm() {
 
       toast.success("Starting...");
       router.push("/exam");
+      //eslint-disable-next-line
     } catch (error: any) {
       toast.error("Check your network and try again");
     } finally {

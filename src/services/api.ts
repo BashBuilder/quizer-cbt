@@ -82,6 +82,7 @@ export const getEnglishQuestionFromDb = async () => {
       },
     );
     return data;
+    // eslint-disable-next-line
   } catch (error) {
     throw new Error("failed to fetch english questions");
   }
@@ -100,6 +101,7 @@ export const getLiteratureQuestionFromDb = async (number: number) => {
       },
     );
     return data;
+    //eslint-disable-next-line
   } catch (error) {
     throw new Error("failed to fetch english questions");
   }

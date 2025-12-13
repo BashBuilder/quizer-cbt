@@ -82,6 +82,7 @@ export function SingleSubjectModal() {
       dispatch(updateCount(response.updatedUser));
       toast.success("Starting...");
       router.push("/exam");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: any) {
       toast.error("Check your network and try again");
     } finally {

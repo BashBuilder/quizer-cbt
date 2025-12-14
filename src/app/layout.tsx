@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google";
-import "./globals.css";
 import QueryProvider from "@/Provider/query-provider";
 import { Toaster } from "sonner";
 import { ReduxProvider } from "@/Provider/redux-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { Chatbot } from "@/components/chatbot";
 import { NotificationSystem } from "@/components/notification-system";
+import "./globals.css";
 
 const monasans = Mona_Sans({
   variable: "--font-worksans",

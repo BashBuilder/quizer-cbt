@@ -40,8 +40,6 @@ export default function HomePage() {
 
   return (
     <div className="bg-background min-h-screen px-4 md:px-8 lg:px-16">
-      {/* Navigation */}
-
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 lg:py-12">
         <div className="from-primary/5 via-background to-accent/5 absolute inset-0 bg-gradient-to-br" />

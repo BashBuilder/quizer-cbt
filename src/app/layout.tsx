@@ -25,7 +25,6 @@ export const metadata: Metadata = {
     "JAMB CBT practice",
     "educational platform",
     "student learning",
-    // "exam preparation",
   ],
   openGraph: {
     title: "Quizer - Practice JAMB, WAEC & General Quizzes for Free",

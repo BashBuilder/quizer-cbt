@@ -16,7 +16,7 @@ import { subjects as availableSubjects } from "@/data/data";
 import { removeItems, saveItem, setCookie } from "@/lib/auth";
 import { localstore, userStore } from "@/data/constants";
 import { toast } from "sonner";
-// import { useGetGroupOfQuestions } from "@/services/questions";
+import { useGetGroupOfQuestions } from "@/services/questions";
 import useAuth from "@/hooks/useAuth";
 import RequireSubscription from "@/components/global/require-subscription";
 import { useDispatch } from "react-redux";
@@ -32,8 +32,7 @@ export default function SetupForm() {
 
   const [subjects, setSubjects] = useState<string[]>(["english"]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // const { mutateAsync: fetchGroupOfSubjects } = useGetGroupOfQuestions();
-  // const { mutateAsync: fetchGroupOfSubjects } = useGetGroupOfQuestions();
+  const { mutateAsync: fetchGroupOfSubjects } = useGetGroupOfQuestions();
 
   // adjust the selected subjects
   const adjustSubject = (subject: string) => {

@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Cookies } from "react-cookie";
 import { decrypt, encrypt } from "./encryption";
-// import jwt from "jsonwebtoken";
-// import { toast } from "sonner";
 
 import { localstore } from "@/data/constants";
 

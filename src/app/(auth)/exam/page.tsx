@@ -7,7 +7,6 @@ import { localstore } from "@/data/constants";
 import ExamPage from "./exam-page";
 
 const Exam = () => {
-  // const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState<
     undefined | QuestionApiResponseType[]
   >();

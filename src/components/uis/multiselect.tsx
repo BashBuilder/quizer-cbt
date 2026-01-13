@@ -387,12 +387,10 @@ const MultipleSelector = React.forwardRef<
         </CommandItem>
       );
 
-      // For normal creatable
       if (!onSearch && inputValue.length > 0) {
         return Item;
       }
 
-      // For async search creatable. avoid showing creatable item before loading at first.
       if (onSearch && debouncedSearchTerm.length > 0 && !isLoading) {
         return Item;
       }

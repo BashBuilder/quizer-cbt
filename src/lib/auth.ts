@@ -92,7 +92,7 @@ export const getItem = (key: string) => {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : null;
   }
-  return null; // Return null if running on the server
+  return null;
 };
 
 export const removeItem = (key: string) => {
